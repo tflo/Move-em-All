@@ -1,6 +1,6 @@
 ## Interface: 100100
 ## Title: Move 'em All
-## Version: 0.9-dev
+## Version: 1.0
 ## IconTexture: Interface/Buttons/JumpUpArrow
 ## Notes: One-click mass move all items with the same ID to the bank or other locations.
 ## Author: Mot
@@ -12,7 +12,7 @@
 # LoadOnDemand:
 
 # X-Wago-ID:
-# X-Curse-Project-ID:
+# X-Curse-Project-ID: 860446
 
 ## SavedVariables: mea_database
 # SavedVariablesPerCharacter:

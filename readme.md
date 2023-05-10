@@ -1,8 +1,15 @@
-# Move 'em All
+# Move ’em All
 
-This addon allows you to mass move all items of the same item ID with a single mouse click.
+This addon, let’s call it MEA, allows you to mass move all items of the same item ID with a single mouse click, e.g. between bank and bags.
 
-Currently the moving works from Bag to…
+The good things about MEA are:
+
+- It is pretty fast.
+- It is compatible with many, probably most, bag addons.
+
+The price for this is a few (minor) caveats, which you can find in the "Caveats" section below.
+
+Currently the mass moving works from Bag to…
 
 - Bank
 - Mail
@@ -11,30 +18,62 @@ Currently the moving works from Bag to…
 
 …and from Bank to Bag.
 
+
 ## Usage
 
 To mass move, click an item with the set mouse button while holding the set modifier key down. The defaults are Right mouse button and Command key for macOS, and Right mouse button and Shift key for Windows.
 
-You can customize mouse button and modifier key to your liking with slash commands:
+You can customize mouse button and modifier keys to your liking with slash commands:
+
 Type `/mea` followed by one of these keywords: For the mouse button `left`, `right`; for the modifier key `shift`, `command` (macOS), `control`, `option` (macOS), `alt` (Windows).
 
-If you type just `/mea`, it will show you the currently set mouse button and modifier key, and the list of available keywords.
+In addition, MEA has a modifier key for moving stuff to the Reagent Bank. You can customize it with `/mea rea`, for example `/mea rea control`. By default, it’s set to Alt/Option. More on that in the Caveats section below.
+
+If you type just `/mea`, it will show you the currently set mouse button and modifier keys. Type `/mea help` for the list of available keywords and other info.
+
+
+## Caveats
+
+### Dumb
+
+The addon is lightweight, super fast - and dumb. (And I actually plan to keep it more or less that way).
+
+‘Dumb’ means: 
+
+- It does not check if the clicked items actually have all arrived (e.g. when the bank is full). So, when it prints “Probably moved 12x [Shrouded Cloth]” to the chat, this is actually an optimistic estimation. Hence the “probably” word ;)
+- It doesn’t know or care if a bag slot holds a single item or a stack of 1000, it always reports back the number of slots it has “moved”, which can be stacks or single items.
+
+### Reagent Bank
+
+When moving stuff from the bags to the bank, by default, the addon moves reagents to the regular bank bags, not to the Reagent Bank. With the Blizz standard bank, it recognizes the Reagent Bank frame and moves the items there if the frame is visible.
+
+However, this does not work if a bag/bank addon replaces the Blizz Reagent Bank frame with its own. Unfortunately, the vast majority of bag addons does this. This is where the aforementioned _Reagent Bag modifier key_ comes into play: To mass move your items to the Reagent Bank, you have to hold down that additional modifier key.
+
+While intended as a workaround, this modifier key actually has a useful side effect: When the key is down, MEA moves items to the Reagent Bag even when the frame is not visible. This allows you to distribute items between the Reagent Bag and the normal bank without having to switch between the two frames.
+
+
+### Guild bank
+
+Currently, mass moving things to the guild bank is disabled because the guild bank has such a slow response time that I would have to implement a throttling system just for that. And with that, moving items individually probably wouldn’t be much slower. Not sure if this is worth it.
+
 
 ## Compatibility
 
-It works with Blizz's bags and with AdiBags, very likely also with many other bag addons. Feel free to test it out and let me know.
+MEA works flawlessly with _Blizzard’s bags_ and with _AdiBags_, very likely also with many other bag addons. I briefly tested it with: _ArkInventory_, _Baud Bag_, _LiteBag_, _Bagnon_, and haven’t noticed any issues. (By the way, LiteBag uses the standard Blizz Reagent Bank frame, which is an advantage here.)
 
-It seems to work fine with Postal too.
+It works fine with _Easy Mail_ and _Postal_ too.
+
 
 ## Notes
 
-Technically, the addon works the same way as the old [ShiftRight](https://www.curseforge.com/wow/addons/shift-right) addon, which was abandoned in 2015 but still worked fine in Shadowlands.
+At its core, the addon works the same way as the old [ShiftRight](https://www.curseforge.com/wow/addons/shift-right) addon, which was abandoned in 2015 but still worked fine in Shadowlands.
 
-My original plan was to "quickly" patch the old ShiftRight, but the Dragonflight API changes are quite hefty, so I basically ended up with a complete rewrite.
+My original plan was to "quickly" patch the old ShiftRight, but thanks to the Dragonflight API changes, this plan failed miserably. So I basically ended up with a complete rewrite, which is this addon.
 
-Currently, guild bank moving is disabled because the guild bank is so slow that I would have to implement a throttling system just for that. Not sure if this is worth it.
+I hope you enjoy it!
 
 
+---
 
-Feel free to post suggestions or issues in the [GitHub Issues](https://github.com/tflo/MoveEmAll/issues) of the repo!
+Feel free to post suggestions or issues in the [GitHub Issues](https://github.com/tflo/Move-em-All/issues) of the repo!
 __Please do not post issues or suggestions in the comments on Curseforge.__
