@@ -2,8 +2,10 @@ local addon_name, a = ...
 mea_database = mea_database or {}
 
 --[[---------------------------------------------------------------------------
-	Variables
+	Variables etc.
 ---------------------------------------------------------------------------]]--
+
+local debug = false
 
 local C_ContainerGetContainerNumSlots = _G.C_Container.GetContainerNumSlots
 local C_ContainerGetContainerItemID = _G.C_Container.GetContainerItemID
@@ -12,38 +14,44 @@ local C_ContainerUseContainerItem = _G.C_Container.UseContainerItem
 -- Bags: Should be continuous from bag 0 to reagent bag (5) - as of wow 10.1
 local BAG_FIRST = BACKPACK_CONTAINER
 local BAG_LAST = BACKPACK_CONTAINER + NUM_BAG_SLOTS + 1
--- Bank: Not continuous, -1 for bank container, then 6 to 12 - as of wow 10.1
+-- Bank: Not continuous: -3 for reagent bank, -1 for bank container, then 6 to 12 - as of wow 10.1
+local BANK_REA = REAGENTBANK_CONTAINER
 local BANK_CONTAINER = BANK_CONTAINER
 local BANK_FIRST = NUM_TOTAL_EQUIPPED_BAG_SLOTS + 1
 local BANK_LAST = NUM_TOTAL_EQUIPPED_BAG_SLOTS + NUM_BANKBAGSLOTS
 
 local C_MEA = '\124cff2196f3'
-local C_EMPH = '\124cnORANGE_FONT_COLOR:'
+local C_KW = '\124cnORANGE_FONT_COLOR:'
+local C_EMPH = '\124cnYELLOW_FONT_COLOR:'
 local MSG_PREFIX = C_MEA .. "Move 'em All\124r:"
 
 local is_mac = IsMacClient()
 local pimf, count
 
 local modifiers = {
-	['Command'] = IsMetaKeyDown,
-	['Shift'] = IsShiftKeyDown,
-	['Option'] = IsAltKeyDown,
-	['Control'] = IsControlKeyDown,
-	['Alt'] = IsAltKeyDown,
+	['command'] = IsMetaKeyDown,
+	['shift'] = IsShiftKeyDown,
+	['option'] = IsAltKeyDown,
+	['control'] = IsControlKeyDown,
+	['alt'] = IsAltKeyDown,
 }
 
 local buttons = {
-	['Left'] = 'LeftButton',
-	['Right'] = 'RightButton',
+	['left'] = 'LeftButton',
+	['right'] = 'RightButton',
 }
 
-local function required_modifier_down()
+local function mea_modifier_down()
 	return modifiers[a.db.modifier]()
 end
 
-local function required_button_clicked()
+local function mea_button_pressed()
 	local btn = GetMouseButtonClicked()
 	return btn == buttons[a.db.button]
+end
+
+local function mea_modifier_rea_down()
+	return modifiers[a.db.modifier_rea]()
 end
 
 local valid_targets = {
@@ -54,6 +62,10 @@ local valid_targets = {
 	[1] = true, -- Trade
 }
 
+
+local function debugprint(...)
+	if debug then print(MSG_PREFIX, 'Debug:', ...) end
+end
 
 --[[---------------------------------------------------------------------------
 	Events
@@ -69,8 +81,9 @@ ef:SetScript('OnEvent', function(self, event, ...)
 		if ... == addon_name then
 			ef:UnregisterEvent 'ADDON_LOADED'
 			a.db = mea_database
-			a.db.button = a.db.button or 'Right'
-			a.db.modifier = a.db.modifier or (is_mac and 'Command' or 'Shift')
+			a.db.button = a.db.button or 'right'
+			a.db.modifier = a.db.modifier or (is_mac and 'command' or 'shift')
+			a.db.modifier_rea = a.db.modifier_rea or (is_mac and 'option' or 'alt')
 		end
 	elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
 		pimf = ...
@@ -89,27 +102,32 @@ local function use_items(bag, item)
 		if not valid_targets[pimf] then return end
 		local bag_item = C_ContainerGetContainerItemID(bag, slot)
 		if bag_item == item then
-			C_ContainerUseContainerItem(bag, slot)
+			C_ContainerUseContainerItem(bag, slot, nil, to_reabank)
 			count = count + 1
 		end
 	end
 end
 
-
 hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
-	if required_modifier_down() and required_button_clicked() then
+-- 	if mea_button_pressed() and (mea_modifier_down() or pimf == 8 and mea_modifier_rea_down()) then
+	if mea_button_pressed() and mea_modifier_down() then -- Probably better, to avoid conflicts
+		debugprint 'Button and modifier conditionals passed.'
 		if itemLocation and itemLocation:IsBagAndSlot() and valid_targets[pimf] then
+			debugprint 'itemLocation and target frame validation passed.'
 			local bag_id = itemLocation.bagID
 			local slot_id = itemLocation.slotIndex
 			local clicked_item = C_ContainerGetContainerItemID(bag_id, slot_id)
 			if clicked_item then
+				debugprint 'At work now.'
 				count = 0
-				if bag_id >= BAG_FIRST and bag_id <= BAG_LAST then
+				if bag_id >= BAG_FIRST and bag_id <= BAG_LAST then -- From bags
+					to_reabank = (pimf == 8 and (mea_modifier_rea_down() or ReagentBankFrame:IsShown()))
 					for bag = BAG_FIRST, BAG_LAST do
 						use_items(bag, clicked_item)
 					end
-				else -- Bank
+				else -- From bank
 					use_items(BANK_CONTAINER, clicked_item)
+					use_items(BANK_REA, clicked_item)
 					for bag = BANK_FIRST, BANK_LAST do
 						use_items(bag, clicked_item)
 					end
@@ -125,22 +143,42 @@ end)
 	UI
 ---------------------------------------------------------------------------]]--
 
-local function cap(str) return (str:gsub('^%l', string.upper)) end
+local function cap(str) return (str:gsub('^%l', strupper)) end
 
 SLASH_MOVEEMALL1 = '/moveemall'
 SLASH_MOVEEMALL2 = '/mea'
 SlashCmdList['MOVEEMALL'] = function(msg)
-	local Msg = msg:gsub('^%l', string.upper)
-	if buttons[Msg] then
-		a.db.button = Msg
-		print(MSG_PREFIX, 'Mouse button set to', C_EMPH .. Msg, '\124rbutton.')
-	elseif modifiers[Msg] then
-		a.db.modifier = Msg
-		print(MSG_PREFIX, 'Modifier key set to', C_EMPH .. Msg, '\124rkey.')
+	msg = strtrim(msg)
+	local msg_rea = strsub(msg, 5)
+	if buttons[msg] then
+		a.db.button = msg
+		print(MSG_PREFIX, 'Mouse button set to', C_KW .. cap(msg), '\124rbutton.')
+	elseif modifiers[msg] then
+		a.db.modifier = msg
+		print(MSG_PREFIX, 'Modifier key set to', C_KW .. cap(msg), '\124rkey.')
+	elseif modifiers[msg_rea] then
+		a.db.modifier_rea = msg_rea
+		print(MSG_PREFIX, 'Reagent bank modifier key set to', C_KW .. cap(msg_rea), '\124rkey.')
+	elseif msg == 'help' then
+		print(MSG_PREFIX,
+			'You can customize mouse button and modifier keys with these key words:' .. C_KW
+		.. '\nleft\124r, ' .. C_KW .. 'right\124r | ' .. C_KW .. 'shift\124r, ' .. (is_mac and C_KW .. 'command\124r, ' or '') .. C_KW .. 'control\124r, ' .. C_KW .. (is_mac and 'option\124r.' or 'alt\124r.')
+		.. '\nExample: ' .. C_KW .. '/mea right\124r and ' .. C_KW .. '/mea shift\124r --> Shift-right-click.'
+		.. '\nDefaults are Command-right for macOS and Shift-right for Windows.'
+		.. '\nCaution: The Reagent Bank modifier key is currently set to '.. C_KW .. cap(a.db.modifier_rea) .. '. \124rAvoid setting your main modifier to the same key, or change the Reagent Bank modifier key with ' .. C_KW .. '/mea rea\124r (e.g. ' .. C_KW .. '/mea rea control\124r).'
+		)
+		print(MSG_PREFIX,
+			'--> The ' .. C_EMPH .. 'Reagent Bank modifier key\124r is ' .. C_EMPH .. 'needed\124r to send items to the Reagent Bank, ' .. C_EMPH .. 'if\124r you are using a bag addon that replaces the Blizz Reagent Bank frame with its own. \nBut it is also useful for the standard bag, as it allows you to send items to the Reagent Bank without actually switching to the frame.'
+		)
+	elseif msg == 'debug' then
+		debug = not debug
+		print(MSG_PREFIX, 'Debug mode '.. (debug and 'enabled' or 'disabled') .. '.')
 	elseif msg == '' then
-		print(MSG_PREFIX, 'Current settings: Mouse button:', C_EMPH .. a.db.button, '\124r| Modifier key:', C_EMPH .. a.db.modifier, '\n\124rYou can set mouse button and modifier key with these key words:', C_EMPH .. '\nleft\124r,', C_EMPH .. 'right\124r |', C_EMPH .. 'shift\124r,', (is_mac and C_EMPH .. 'command\124r,' or ''), C_EMPH .. 'control\124r,', C_EMPH .. (is_mac and 'option\124r.' or 'alt\124r.'), '\nExample:', C_EMPH .. '/mea right\124r and', C_EMPH .. '/mea shift\124r --> Shift-right-click. \nDefaults are Command-right for macOS and Shift-right for Windows.')
+		print(MSG_PREFIX, 'Current settings: Mouse button: '.. C_KW .. cap(a.db.button) .. ' \124r| Modifier key: ' .. C_KW .. cap(a.db.modifier).. ' \124r| Reagent bank modifier key: ' .. C_KW .. cap(a.db.modifier_rea)
+		.. '\n\124rYou can freely customize mouse button and modifier keys. Type ' .. C_KW .. '/mea help\124r to learn how.'
+		)
 	else
-		print(MSG_PREFIX, 'That was not a valid input. Type', C_EMPH .. '/mea\124r for help.')
+		print(MSG_PREFIX, 'That was not a valid input. Type', C_KW .. '/mea\124r for help.')
 	end
 end
 
