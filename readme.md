@@ -43,6 +43,7 @@ The addon is lightweight, super fast - and dumb. (And I actually plan to keep it
 - It does not check if the clicked items actually have all arrived (e.g. when the bank is full). So, when it prints “Probably moved 12x [Shrouded Cloth]” to the chat, this is actually an optimistic estimation. Hence the “probably” word ;)
 - It doesn’t know or care if a bag slot holds a single item or a stack of 1000, it always reports back the number of slots it has “moved”, which can be stacks or single items.
 
+
 ### Reagent Bank
 
 When moving stuff from the bags to the bank, by default, the addon moves reagents to the regular bank bags, not to the Reagent Bank. With the Blizz standard bank, it recognizes the Reagent Bank frame and moves the items there if the frame is visible.
