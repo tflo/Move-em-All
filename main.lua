@@ -86,6 +86,7 @@ ef:SetScript('OnEvent', function(self, event, ...)
 			a.db.button = a.db.button or 'right'
 			a.db.modifier = a.db.modifier or (is_mac and 'command' or 'shift')
 			a.db.modifier_rea = a.db.modifier_rea or (is_mac and 'option' or 'alt')
+			a.db.delay_normal = a.db.delay_normal or nil
 			a.db.delay_guildbank = a.db.delay_guildbank or 0.6
 		end
 	elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
@@ -181,6 +182,10 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 		print(MSG_PREFIX,
 			'--> The ' .. C_EMPH .. 'Reagent Bank modifier key\124r is ' .. C_EMPH .. 'needed\124r to send items to the Reagent Bank, ' .. C_EMPH .. 'if\124r you are using a bag addon that replaces the Blizz Reagent Bank frame with its own. \nBut it is also useful for the standard bag, as it allows you to send items to the Reagent Bank without actually switching to the frame.'
 		)
+	elseif tonumber(msg) then -- Experimental!
+		local d = tonumber(msg)
+		a.db.delay_normal = (d >= 0 and d <= 1) and d or nil
+		print(MSG_PREFIX, 'Delay set to '.. (a.db.delay_normal or 'none (no timer used)') .. '.')
 	elseif msg == 'debug' then
 		debug = not debug
 		print(MSG_PREFIX, 'Debug mode '.. (debug and 'enabled' or 'disabled') .. '.')
