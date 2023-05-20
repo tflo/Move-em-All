@@ -10,6 +10,7 @@ local debug = false
 local C_ContainerGetContainerNumSlots = _G.C_Container.GetContainerNumSlots
 local C_ContainerGetContainerItemID = _G.C_Container.GetContainerItemID
 local C_ContainerUseContainerItem = _G.C_Container.UseContainerItem
+local C_TimerAfter = C_Timer.After
 
 -- Bags: Should be continuous from bag 0 to reagent bag (5) - as of wow 10.1
 local BAG_FIRST = BACKPACK_CONTAINER
@@ -26,7 +27,7 @@ local C_EMPH = '\124cnYELLOW_FONT_COLOR:'
 local MSG_PREFIX = C_MEA .. "Move 'em All\124r:"
 
 local is_mac = IsMacClient()
-local pimf, count
+local pimf, count, wait
 
 local modifiers = {
 	['command'] = IsMetaKeyDown,
@@ -57,7 +58,7 @@ end
 local valid_targets = {
 	[8] = true, -- Bank
 	[17] = true, -- Mail
-	[10] = false, -- Guild bank
+	[10] = true, -- Guild bank
 	[5] = true, -- Merchant
 	[1] = true, -- Trade
 	[26] = true, -- Void Storage
@@ -85,6 +86,7 @@ ef:SetScript('OnEvent', function(self, event, ...)
 			a.db.button = a.db.button or 'right'
 			a.db.modifier = a.db.modifier or (is_mac and 'command' or 'shift')
 			a.db.modifier_rea = a.db.modifier_rea or (is_mac and 'option' or 'alt')
+			a.db.delay_guildbank = a.db.delay_guildbank or 0.6
 		end
 	elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
 		pimf = ...
@@ -103,7 +105,14 @@ local function use_items(bag, item)
 		if not valid_targets[pimf] then return end
 		local bag_item = C_ContainerGetContainerItemID(bag, slot)
 		if bag_item == item then
-			C_ContainerUseContainerItem(bag, slot, nil, to_reabank)
+			if delay then
+				wait = delay * count
+				C_TimerAfter(wait, function()
+					C_ContainerUseContainerItem(bag, slot, nil, to_reabank)
+				end)
+			else
+				C_ContainerUseContainerItem(bag, slot, nil, to_reabank)
+			end
 			count = count + 1
 		end
 	end
@@ -119,8 +128,9 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 			local slot_id = itemLocation.slotIndex
 			local clicked_item = C_ContainerGetContainerItemID(bag_id, slot_id)
 			if clicked_item then
-				debugprint 'At work now.'
-				count = 0
+				count, wait = 0, 0
+				delay = pimf == 10 and max(a.db.delay_guildbank, a.db.delay_normal or 0) or a.db.delay_normal
+				debugprint('At work now. Active delay:', delay)
 				if bag_id >= BAG_FIRST and bag_id <= BAG_LAST then -- From bags
 					to_reabank = (pimf == 8 and (mea_modifier_rea_down() or ReagentBankFrame:IsShown()))
 					for bag = BAG_FIRST, BAG_LAST do
@@ -175,7 +185,7 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 		debug = not debug
 		print(MSG_PREFIX, 'Debug mode '.. (debug and 'enabled' or 'disabled') .. '.')
 	elseif msg == '' then
-		print(MSG_PREFIX, 'Current settings: Mouse button: '.. C_KW .. cap(a.db.button) .. ' \124r| Modifier key: ' .. C_KW .. cap(a.db.modifier).. ' \124r| Reagent bank modifier key: ' .. C_KW .. cap(a.db.modifier_rea)
+		print(MSG_PREFIX, 'Current settings: Mouse button: '.. C_KW .. cap(a.db.button) .. ' \124r| Modifier key: ' .. C_KW .. cap(a.db.modifier).. ' \124r| Reagent bank modifier key: ' .. C_KW .. cap(a.db.modifier_rea) .. ' \124r| Delay: ' .. C_EMPH .. (a.db.delay_normal or 'none') .. ' \124r| Delay GB: ' .. C_EMPH .. (a.db.delay_guildbank or 'none')
 		.. '\n\124rYou can freely customize mouse button and modifier keys. Type ' .. C_KW .. '/mea help\124r to learn how.'
 		)
 	else
