@@ -12,6 +12,7 @@ local C_ContainerGetContainerItemID = _G.C_Container.GetContainerItemID
 local C_ContainerUseContainerItem = _G.C_Container.UseContainerItem
 local C_TimerAfter = C_Timer.After
 
+-- See https://wowpedia.fandom.com/wiki/BagID
 -- Bags: Should be continuous from bag 0 to reagent bag (5) - as of wow 10.1
 local BAG_FIRST = BACKPACK_CONTAINER
 local BAG_LAST = BACKPACK_CONTAINER + NUM_BAG_SLOTS + 1
@@ -106,6 +107,7 @@ local function use_items(bag, item)
 		if not valid_targets[pimf] then return end
 		local bag_item = C_ContainerGetContainerItemID(bag, slot)
 		if bag_item == item then
+-- 			debugprint('Count:', count, 'Bag:', bag, 'Slot:', slot)
 			if delay then
 				wait = delay * count
 				C_TimerAfter(wait, function()
@@ -125,6 +127,7 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 		debugprint 'Button and modifier conditionals passed.'
 		if itemLocation and itemLocation:IsBagAndSlot() and valid_targets[pimf] then
 			debugprint 'itemLocation and target frame validation passed.'
+-- 			debugprint(tf6.tprint(itemLocation))
 			local bag_id = itemLocation.bagID
 			local slot_id = itemLocation.slotIndex
 			local clicked_item = C_ContainerGetContainerItemID(bag_id, slot_id)
