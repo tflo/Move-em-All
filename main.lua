@@ -60,12 +60,13 @@ local valid_targets = {
 	[10] = false, -- Guild bank
 	[5] = true, -- Merchant
 	[1] = true, -- Trade
+	[26] = true, -- Void Storage
 }
-
 
 local function debugprint(...)
 	if debug then print(MSG_PREFIX, 'Debug:', ...) end
 end
+
 
 --[[---------------------------------------------------------------------------
 	Events
