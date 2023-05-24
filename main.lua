@@ -27,6 +27,7 @@ local C_KW = '\124cnORANGE_FONT_COLOR:'
 local C_EMPH = '\124cnYELLOW_FONT_COLOR:'
 local MSG_PREFIX = C_MEA .. "Move 'em All\124r:"
 
+local DELAY_GB = 0.6
 local is_mac = IsMacClient()
 local pimf, count, wait
 
@@ -88,7 +89,7 @@ ef:SetScript('OnEvent', function(self, event, ...)
 			a.db.modifier = a.db.modifier or (is_mac and 'command' or 'shift')
 			a.db.modifier_rea = a.db.modifier_rea or (is_mac and 'option' or 'alt')
 			a.db.delay_normal = a.db.delay_normal or nil
-			a.db.delay_guildbank = a.db.delay_guildbank or 0.6
+			a.db.delay_guildbank = a.db.delay_guildbank or DELAY_GB
 		end
 	elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
 		pimf = ...

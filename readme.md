@@ -15,6 +15,8 @@ Currently the mass moving works from Bag to…
 - Mail
 - Merchant
 - Trade
+- Guild Bank (new since vXXX; not much tested!)
+- Void Storage (new since vXXX; not much tested!)
 
 …and from Bank to Bag.
 
@@ -59,6 +61,8 @@ While intended as a workaround, this modifier key actually has a useful side eff
 ### Guild bank
 
 Currently, mass moving things to the guild bank is disabled because the guild bank has such a slow response time that I would have to implement a throttling system just for that. And with that, moving items individually probably wouldn’t be much slower. Not sure if this is worth it.
+
+New _and experimental_: With vXXX, I have enabled the Guild Bank as mass move target. Using a very primitive throttling, the items are moved with a delay of 0.5s. This seems to work so far, though sometimes it happens that not all items are moved with one click.
 
 
 ## Compatibility
