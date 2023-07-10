@@ -15,8 +15,8 @@ Currently the mass moving works from Bag to…
 - Mail
 - Merchant
 - Trade
-- Guild Bank (new since vXXX; not much tested!)
-- Void Storage (new since vXXX; not much tested!)
+- Guild Bank (new since v2.0)
+- Void Storage
 
 …and from Bank to Bag.
 
