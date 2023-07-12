@@ -2,11 +2,12 @@ local addon_name, a = ...
 mea_database = mea_database or {}
 
 --[[---------------------------------------------------------------------------
-	Variables etc.
+	§ Definitions, references
 ---------------------------------------------------------------------------]]--
 
 local debug = false
 
+local _
 local C_ContainerGetContainerNumSlots = _G.C_Container.GetContainerNumSlots
 local C_ContainerGetContainerItemID = _G.C_Container.GetContainerItemID
 local C_ContainerUseContainerItem = _G.C_Container.UseContainerItem
@@ -72,7 +73,7 @@ end
 
 
 --[[---------------------------------------------------------------------------
-	Events
+	§ Events
 ---------------------------------------------------------------------------]]--
 
 local ef = CreateFrame 'Frame'
@@ -100,7 +101,7 @@ end)
 
 
 --[[---------------------------------------------------------------------------
-	Main
+	§ Main
 ---------------------------------------------------------------------------]]--
 
 local function use_items(bag, item)
@@ -156,8 +157,16 @@ end)
 
 
 --[[---------------------------------------------------------------------------
-	UI
+	§ UI
 ---------------------------------------------------------------------------]]--
+
+--[[ Commands
+Example        	 Possible variants                    	 Function
+/mea left      	 left, right                          	 Mouse btn
+/mea shift     	 command, shift, option, control, alt 	 Modifier
+/mea rea shift 	 command, shift, option, control, alt 	 Reagent Bag modifier
+/mea 0.6       	 float between 0 and 1, non-including 	 Generic delay
+]]
 
 local function cap(str) return (str:gsub('^%l', strupper)) end
 
