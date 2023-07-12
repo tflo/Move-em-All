@@ -29,7 +29,7 @@ local MSG_PREFIX = C_MEA .. "Move 'em All\124r:"
 
 local DELAY_GB = 0.6
 local is_mac = IsMacClient()
-local pimf, count, wait
+local pimf, count, wait, delay, to_reabank
 
 local modifiers = {
 	['command'] = IsMetaKeyDown,
