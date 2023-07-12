@@ -16,12 +16,9 @@ Currently the mass moving works from Bag to…
 - Merchant
 - Trade
 - Guild Bank (new since v2.0)
-- Void Storage
+- Void Storage  (new since v2.0)
 
 …and from Bank to Bag.
-
-
-_Before you continue reading: Even on their “New website”, CurseForge is still not able to format text correctly. For a correctly rendered and formatted description, please go the [GitHub page](https://github.com/tflo/Move-em-All) of MEA. If you have the time, please [send a ticket to CurseForge/Overwolf ](https://support.curseforge.com/en/support/tickets/new) about this annoyance._
 
 
 ## Usage
@@ -67,7 +64,7 @@ New _and experimental_: With v2.0, I have enabled the Guild Bank as mass move ta
 
 ## Compatibility
 
-MEA works flawlessly with _Blizzard’s bags_ and with _AdiBags_, very likely also with many other bag addons. I briefly tested it with: _ArkInventory_, _Baud Bag_, _LiteBag_, _Bagnon_, and haven’t noticed any issues. (By the way, LiteBag uses the standard Blizz Reagent Bank frame, which is an advantage here.)
+MEA works flawlessly with _Blizzard’s bags_ and with _AdiBags,_ very likely also with many other bag addons. I briefly tested it with: _ArkInventory, Baud Bag, LiteBag, Bagnon,_ and haven’t noticed any issues. (By the way, LiteBag uses the standard Blizz Reagent Bank frame, which is an advantage here.)
 
 It works fine with _Easy Mail_ and _Postal_ too.
 
