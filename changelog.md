@@ -1,3 +1,8 @@
+#### 2.0.1 (2023-07-12)
+- Fixed some stuff in the readme.
+- toc updated for 10.1.5.
+  - I have not yet had a chance to really test the addon with 10.1.5, but as far as I know there are no relevant API changes. If I find any problems, you'll get a content update soon.
+
 #### 2.0 (2023-05-24)
 - Quite big version jump for a fresh addon you think?
   - True, but you get a bunch of new stuff, and the addon works pretty well right now, so I don’t think there will be more major version changes in the foreseeable future. So the jump from 1.0 to 2.0 rather marks the addon coming out of its adolescence ;)

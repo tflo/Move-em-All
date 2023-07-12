@@ -1,6 +1,6 @@
-## Interface: 100100
+## Interface: 100105
 ## Title: Move 'em All
-## Version: 2.0
+## Version: 2.0.1
 ## IconTexture: Interface/Buttons/JumpUpArrow
 ## Notes: One-click mass move all items with the same ID to the bank or other locations.
 ## Author: Mot
