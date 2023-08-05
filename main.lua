@@ -160,12 +160,13 @@ end)
 	§ UI
 ---------------------------------------------------------------------------]]--
 
---[[ Commands
-Example        	 Possible variants                    	 Function
-/mea left      	 left, right                          	 Mouse btn
-/mea shift     	 command, shift, option, control, alt 	 Modifier
-/mea rea shift 	 command, shift, option, control, alt 	 Reagent Bag modifier
-/mea 0.6       	 float between 0 and 1, non-including 	 Generic delay
+--[[ Commands:
+Example       	Possible variants                   	Function
+/mea left     	left, right                         	Mouse btn
+/mea shift    	command, shift, option, control, alt	Modifier
+/mea rea shift	command, shift, option, control, alt	Reagent Bag modifier
+/mea all 0.6  	float > 0 and <= 1                  	Generic delay
+/mea gb 0.6   	float > 0 and <= 1                  	Guild bank delay (only used if greater than generic delay)
 ]]
 
 local function cap(str) return (str:gsub('^%l', strupper)) end
@@ -173,18 +174,40 @@ local function cap(str) return (str:gsub('^%l', strupper)) end
 SLASH_MOVEEMALL1 = '/moveemall'
 SLASH_MOVEEMALL2 = '/mea'
 SlashCmdList['MOVEEMALL'] = function(msg)
-	msg = strtrim(msg)
-	local msg_rea = strsub(msg, 5)
-	if buttons[msg] then
-		a.db.button = msg
-		print(MSG_PREFIX, 'Mouse button set to', C_KW .. cap(msg), '\124rbutton.')
-	elseif modifiers[msg] then
-		a.db.modifier = msg
-		print(MSG_PREFIX, 'Modifier key set to', C_KW .. cap(msg), '\124rkey.')
-	elseif modifiers[msg_rea] then
-		a.db.modifier_rea = msg_rea
-		print(MSG_PREFIX, 'Reagent bank modifier key set to', C_KW .. cap(msg_rea), '\124rkey.')
-	elseif msg == 'help' then
+	local mt = {}
+	for v in string.gmatch(msg, "[^ ]+") do
+		tinsert(mt, v)
+	end
+	if buttons[mt[1]] then
+		a.db.button = mt[1]
+		print(MSG_PREFIX, 'Mouse button set to', C_KW .. cap(a.db.button), '\124rbutton.')
+	elseif modifiers[mt[1]] then
+		a.db.modifier = mt[1]
+		print(MSG_PREFIX, 'Modifier key set to', C_KW .. cap(a.db.modifier), '\124rkey.')
+	elseif mt[1] == 'rea' and modifiers[mt[2]] then
+		a.db.modifier_rea = mt[2]
+		print(MSG_PREFIX, 'Reagent bank modifier key set to', C_KW .. cap(a.db.modifier_rea), '\124rkey.')
+	elseif tonumber(mt[2]) then
+		local d = tonumber(mt[2]) -- Delay
+		if mt[1] == 'all' then -- Delay for all targets
+			-- FIXME: Delay of 0 makes no sense, due to the way we are using the timer (wait = delay * count)
+			a.db.delay_normal = (d >= 0 and d <= 1) and d or nil
+			print(MSG_PREFIX, 'Delay for all targets set to ' .. (a.db.delay_normal or 'none (no timer used)') .. '.')
+			if a.db.delay_normal then
+				print(MSG_PREFIX, C_EMPH .. 'You have set a delay for ' .. C_KW .. 'all\124r targets. Please note that a delay should only be needed for the guild bank! \nIf you have set the delay by accident, please disable it again (' .. C_KW .. '/mea all 0\124r). To set the guild bank delay, use ' .. C_KW .. 'gb\124r (for example ' .. C_KW .. '/mea gb 0.5\124r). Default for the guild bank is ' .. C_KW.. DELAY_GB ..'s\124r.')
+			end
+		elseif mt[1] == 'gb' then -- Delay for guild bank
+			a.db.delay_guildbank = (d >= 0 and d <= 1) and d or nil
+			print(MSG_PREFIX, 'Delay for guild bank set to ' .. (a.db.delay_guildbank or 'none (no timer used)') .. '.')
+		end
+	elseif mt[1] == 'debug' then
+		debug = not debug
+		print(MSG_PREFIX, 'Debug mode '.. (debug and 'enabled' or 'disabled') .. '.')
+	elseif #mt == 0 then
+		print(MSG_PREFIX, 'Current settings: Mouse button: '.. C_KW .. cap(a.db.button) .. ' \124r| Modifier key: ' .. C_KW .. cap(a.db.modifier).. ' \124r| Reagent bank modifier key: ' .. C_KW .. cap(a.db.modifier_rea) .. ' \124r| Delay: ' .. C_EMPH .. (a.db.delay_normal and a.db.delay_normal .. 's' or 'none') .. ' \124r| Delay for guild bank: ' .. C_EMPH .. (a.db.delay_guildbank and a.db.delay_guildbank .. 's' or 'none')
+		.. '\n\124rYou can freely customize mouse button and modifier keys. Type ' .. C_KW .. '/mea help\124r to learn how.'
+		)
+	elseif mt[1] == 'help' then
 		print(MSG_PREFIX,
 			'You can customize mouse button and modifier keys with these key words:' .. C_KW
 		.. '\nleft\124r, ' .. C_KW .. 'right\124r | ' .. C_KW .. 'shift\124r, ' .. (is_mac and C_KW .. 'command\124r, ' or '') .. C_KW .. 'control\124r, ' .. C_KW .. (is_mac and 'option\124r.' or 'alt\124r.')
@@ -194,17 +217,6 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 		)
 		print(MSG_PREFIX,
 			'--> The ' .. C_EMPH .. 'Reagent Bank modifier key\124r is ' .. C_EMPH .. 'needed\124r to send items to the Reagent Bank, ' .. C_EMPH .. 'if\124r you are using a bag addon that replaces the Blizz Reagent Bank frame with its own. \nBut it is also useful for the standard bag, as it allows you to send items to the Reagent Bank without actually switching to the frame.'
-		)
-	elseif tonumber(msg) then -- Experimental!
-		local d = tonumber(msg)
-		a.db.delay_normal = (d >= 0 and d <= 1) and d or nil
-		print(MSG_PREFIX, 'Delay set to '.. (a.db.delay_normal or 'none (no timer used)') .. '.')
-	elseif msg == 'debug' then
-		debug = not debug
-		print(MSG_PREFIX, 'Debug mode '.. (debug and 'enabled' or 'disabled') .. '.')
-	elseif msg == '' then
-		print(MSG_PREFIX, 'Current settings: Mouse button: '.. C_KW .. cap(a.db.button) .. ' \124r| Modifier key: ' .. C_KW .. cap(a.db.modifier).. ' \124r| Reagent bank modifier key: ' .. C_KW .. cap(a.db.modifier_rea) .. ' \124r| Delay: ' .. C_EMPH .. (a.db.delay_normal or 'none') .. ' \124r| Delay GB: ' .. C_EMPH .. (a.db.delay_guildbank or 'none')
-		.. '\n\124rYou can freely customize mouse button and modifier keys. Type ' .. C_KW .. '/mea help\124r to learn how.'
 		)
 	else
 		print(MSG_PREFIX, 'That was not a valid input. Type', C_KW .. '/mea\124r for help.')
