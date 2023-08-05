@@ -169,15 +169,18 @@ Example       	Possible variants                   	Function
 /mea gb 0.6   	float > 0 and <= 1                  	Guild bank delay (only used if greater than generic delay)
 ]]
 
-local function cap(str) return (str:gsub('^%l', strupper)) end
 
 SLASH_MOVEEMALL1 = '/moveemall'
 SLASH_MOVEEMALL2 = '/mea'
 SlashCmdList['MOVEEMALL'] = function(msg)
 	local mt = {}
-	for v in string.gmatch(msg, "[^ ]+") do
+	for v in msg:gmatch '[^ ]+' do
 		tinsert(mt, v)
 	end
+
+	local function cap(str) return (str:gsub('^%l', strupper)) end
+	local function wants_help(str) return str:match('help') or str == 'h' or str == '-h' end
+
 	if buttons[mt[1]] then
 		a.db.button = mt[1]
 		print(MSG_PREFIX, 'Mouse button set to', C_KW .. cap(a.db.button), '\124rbutton.')
@@ -206,7 +209,7 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 		print(MSG_PREFIX, 'Current settings: Mouse button: '.. C_KW .. cap(a.db.button) .. ' \124r| Modifier key: ' .. C_KW .. cap(a.db.modifier).. ' \124r| Reagent bank modifier key: ' .. C_KW .. cap(a.db.modifier_rea) .. ' \124r| Delay: ' .. C_EMPH .. (a.db.delay_normal and a.db.delay_normal .. 's' or 'none') .. ' \124r| Delay for guild bank: ' .. C_EMPH .. (a.db.delay_guildbank and a.db.delay_guildbank .. 's' or 'none')
 		.. '\n\124rYou can freely customize mouse button and modifier keys. Type ' .. C_KW .. '/mea help\124r to learn how.'
 		)
-	elseif mt[1] == 'help' then
+	elseif wants_help(mt[1]) then
 		print(MSG_PREFIX,
 			'You can customize mouse button and modifier keys with these key words:' .. C_KW
 		.. '\nleft\124r, ' .. C_KW .. 'right\124r | ' .. C_KW .. 'shift\124r, ' .. (is_mac and C_KW .. 'command\124r, ' or '') .. C_KW .. 'control\124r, ' .. C_KW .. (is_mac and 'option\124r.' or 'alt\124r.')
@@ -218,7 +221,7 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 			'--> The ' .. C_EMPH .. 'Reagent Bank modifier key\124r is ' .. C_EMPH .. 'needed\124r to send items to the Reagent Bank, ' .. C_EMPH .. 'if\124r you are using a bag addon that replaces the Blizz Reagent Bank frame with its own. \nBut it is also useful for the standard bag, as it allows you to send items to the Reagent Bank without actually switching to the frame.'
 		)
 	else
-		print(MSG_PREFIX, 'That was not a valid input. Type', C_KW .. '/mea\124r for help.')
+		print(MSG_PREFIX, 'That was not a valid input. Type', C_KW .. '/mea h\124r for help.')
 	end
 end
 
