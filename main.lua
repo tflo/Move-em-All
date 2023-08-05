@@ -190,14 +190,13 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 	elseif tonumber(mt[2]) then
 		local d = tonumber(mt[2]) -- Delay
 		if mt[1] == 'all' then -- Delay for all targets
-			-- FIXME: Delay of 0 makes no sense, due to the way we are using the timer (wait = delay * count)
-			a.db.delay_normal = (d >= 0 and d <= 1) and d or nil
+			a.db.delay_normal = (d > 0 and d <= 1) and d or nil
 			print(MSG_PREFIX, 'Delay for all targets set to ' .. (a.db.delay_normal or 'none (no timer used)') .. '.')
 			if a.db.delay_normal then
 				print(MSG_PREFIX, C_EMPH .. 'You have set a delay for ' .. C_KW .. 'all\124r targets. Please note that a delay should only be needed for the guild bank! \nIf you have set the delay by accident, please disable it again (' .. C_KW .. '/mea all 0\124r). To set the guild bank delay, use ' .. C_KW .. 'gb\124r (for example ' .. C_KW .. '/mea gb 0.5\124r). Default for the guild bank is ' .. C_KW.. DELAY_GB ..'s\124r.')
 			end
 		elseif mt[1] == 'gb' then -- Delay for guild bank
-			a.db.delay_guildbank = (d >= 0 and d <= 1) and d or nil
+			a.db.delay_guildbank = (d > 0 and d <= 1) and d or nil
 			print(MSG_PREFIX, 'Delay for guild bank set to ' .. (a.db.delay_guildbank or 'none (no timer used)') .. '.')
 		end
 	elseif mt[1] == 'debug' then
