@@ -58,13 +58,23 @@ local function mea_modifier_rea_down()
 	return modifiers[a.db.modifier_rea]()
 end
 
+
+-- https://github.com/Ketho/BlizzardInterfaceResources/blob/mainline/Resources/LuaEnum.lua
+
+local PIMF_BANK = Enum.PlayerInteractionType.Banker -- 8
+local PIMF_MAIL = Enum.PlayerInteractionType.MailInfo -- 17
+local PIMF_GUILDBANK = Enum.PlayerInteractionType.GuildBanker -- 10
+local PIMF_MERCHANT = Enum.PlayerInteractionType.Merchant -- 5
+local PIMF_TRADE = Enum.PlayerInteractionType.TradePartner -- 1
+local PIMF_VOID = Enum.PlayerInteractionType.VoidStorageBanker -- 26
+
 local valid_targets = {
-	[8] = true, -- Bank
-	[17] = true, -- Mail
-	[10] = true, -- Guild bank
-	[5] = true, -- Merchant
-	[1] = true, -- Trade
-	[26] = true, -- Void Storage
+	[PIMF_BANK] = true, -- Bank
+	[PIMF_MAIL] = true, -- Mail
+	[PIMF_GUILDBANK] = true, -- Guild bank
+	[PIMF_MERCHANT] = true, -- Merchant
+	[PIMF_TRADE] = true, -- Trade
+	[PIMF_VOID] = true, -- Void Storage
 }
 
 local function debugprint(...)
@@ -135,10 +145,10 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 			local clicked_item = C_ContainerGetContainerItemID(bag_id, slot_id)
 			if clicked_item then
 				count, wait = 0, 0
-				delay = pimf == 10 and max(a.db.delay_guildbank, a.db.delay_normal or 0) or a.db.delay_normal
+				delay = pimf == PIMF_GUILDBANK and max(a.db.delay_guildbank, a.db.delay_normal or 0) or a.db.delay_normal
 				debugprint('At work now. Active delay:', delay)
 				if bag_id >= BAG_FIRST and bag_id <= BAG_LAST then -- From bags
-					to_reabank = (pimf == 8 and (mea_modifier_rea_down() or ReagentBankFrame:IsShown()))
+					to_reabank = (pimf == PIMF_BANK and (mea_modifier_rea_down() or ReagentBankFrame:IsShown()))
 					for bag = BAG_FIRST, BAG_LAST do
 						use_items(bag, clicked_item)
 					end
