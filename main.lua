@@ -155,7 +155,7 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 			local clicked_item = C_ContainerGetContainerItemID(bag_id, slot_id)
 			if clicked_item then
 				count, wait = 0, 0
-				delay = pimf == PIMF_GUILDBANK and max(a.db.delay_guildbank, a.db.delay_normal or 0) or a.db.delay_normal
+				delay = pimf == PIMF_GUILDBANK and max(a.db.delay_guildbank or 0, a.db.delay_normal or 0) or a.db.delay_normal
 				debugprint('At work now. Active delay:', delay)
 				if bag_id >= BAG_FIRST and bag_id <= BAG_LAST then -- From bags
 					to_reabank = (pimf == PIMF_BANK and (mea_modifier_rea_down() or ReagentBankFrame:IsShown()))
