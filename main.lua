@@ -28,7 +28,7 @@ local C_KW = '\124cnORANGE_FONT_COLOR:'
 local C_EMPH = '\124cnYELLOW_FONT_COLOR:'
 local MSG_PREFIX = C_MEA .. "Move 'em All\124r:"
 
-local DELAY_GB = 0.6
+local DELAY_GB_DEFAULT = 0.6
 local is_mac = IsMacClient()
 local pimf, count, wait, delay, to_reabank
 
@@ -100,7 +100,7 @@ ef:SetScript('OnEvent', function(self, event, ...)
 			a.db.modifier = a.db.modifier or (is_mac and 'command' or 'shift')
 			a.db.modifier_rea = a.db.modifier_rea or (is_mac and 'option' or 'alt')
 			a.db.delay_normal = a.db.delay_normal or nil
-			a.db.delay_guildbank = a.db.delay_guildbank or DELAY_GB
+			a.db.delay_guildbank = a.db.delay_guildbank or DELAY_GB_DEFAULT
 		end
 	elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
 		pimf = ...
@@ -200,18 +200,17 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 	elseif mt[1] == 'rea' and modifiers[mt[2]] then
 		a.db.modifier_rea = mt[2]
 		print(MSG_PREFIX, 'Reagent bank modifier key set to', C_KW .. cap(a.db.modifier_rea), '\124rkey.')
-	elseif tonumber(mt[2]) then
-		local d = tonumber(mt[2]) -- Delay
-		if mt[1] == 'all' then -- Delay for all targets
-			a.db.delay_normal = (d > 0 and d <= 1) and d or nil
-			print(MSG_PREFIX, 'Delay for all targets set to ' .. (a.db.delay_normal or 'none (no timer used)') .. '.')
-			if a.db.delay_normal then
-				print(MSG_PREFIX, C_EMPH .. 'You have set a delay for ' .. C_KW .. 'all\124r targets. Please note that a delay should only be needed for the guild bank! \nIf you have set the delay by accident, please disable it again (' .. C_KW .. '/mea all 0\124r). To set the guild bank delay, use ' .. C_KW .. 'gb\124r (for example ' .. C_KW .. '/mea gb 0.5\124r). Default for the guild bank is ' .. C_KW.. DELAY_GB ..'s\124r.')
-			end
-		elseif mt[1] == 'gb' then -- Delay for guild bank
-			a.db.delay_guildbank = (d > 0 and d <= 1) and d or nil
-			print(MSG_PREFIX, 'Delay for guild bank set to ' .. (a.db.delay_guildbank or 'none (no timer used)') .. '.')
+	elseif tonumber(mt[2]) and mt[1] == 'all!' then -- Delay global
+		local d = tonumber(mt[2])
+		a.db.delay_normal = (d > 0 and d <= 1) and d or nil
+		print(MSG_PREFIX, 'Global delay (all targets except guild bank) set to ' .. (a.db.delay_normal or 'none (no timer used)') .. '.')
+		if a.db.delay_normal then
+			print(MSG_PREFIX, C_EMPH .. 'You have set a global delay for ' .. C_KW .. 'all\124r targets. Please note that a delay should only be needed for the guild bank! \nIf you have set the global delay by accident, please disable it again (' .. C_KW .. '/mea all! 0\124r). To set the guild bank delay, use ' .. C_KW .. 'gb\124r (for example ' .. C_KW .. '/mea gb 0.5\124r). Default delay for the guild bank is ' .. C_KW.. DELAY_GB_DEFAULT ..'s\124r.')
 		end
+	elseif tonumber(mt[2]) and mt[1] == 'gb' then -- Delay for guild bank
+		local d = tonumber(mt[2])
+		a.db.delay_guildbank = (d > 0 and d <= 1) and d or nil
+		print(MSG_PREFIX, 'Delay for guild bank set to ' .. (a.db.delay_guildbank or 'none (no timer used)') .. '.')
 	elseif mt[1] == 'debug' then
 		debug = not debug
 		print(MSG_PREFIX, 'Debug mode '.. (debug and 'enabled' or 'disabled') .. '.')
@@ -219,16 +218,26 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 		print(MSG_PREFIX, 'Current settings: Mouse button: '.. C_KW .. cap(a.db.button) .. ' \124r| Modifier key: ' .. C_KW .. cap(a.db.modifier).. ' \124r| Reagent bank modifier key: ' .. C_KW .. cap(a.db.modifier_rea) .. ' \124r| Delay: ' .. C_EMPH .. (a.db.delay_normal and a.db.delay_normal .. 's' or 'none') .. ' \124r| Delay for guild bank: ' .. C_EMPH .. (a.db.delay_guildbank and a.db.delay_guildbank .. 's' or 'none')
 		.. '\n\124rYou can freely customize mouse button and modifier keys. Type ' .. C_KW .. '/mea help\124r to learn how.'
 		)
-	elseif wants_help(mt[1]) then
+	elseif wants_help(mt[1]) and #mt == 1 then
 		print(MSG_PREFIX,
-			'You can customize mouse button and modifier keys with these key words:' .. C_KW
+			'You can customize ' .. C_EMPH .. 'mouse button\124r and ' .. C_EMPH .. 'modifier keys\124r with these key words:' .. C_KW
 		.. '\nleft\124r, ' .. C_KW .. 'right\124r | ' .. C_KW .. 'shift\124r, ' .. (is_mac and C_KW .. 'command\124r, ' or '') .. C_KW .. 'control\124r, ' .. C_KW .. (is_mac and 'option\124r.' or 'alt\124r.')
 		.. '\nExample: ' .. C_KW .. '/mea right\124r and ' .. C_KW .. '/mea shift\124r --> Shift-right-click.'
 		.. '\nDefaults are Command-right for macOS and Shift-right for Windows.'
-		.. '\nCaution: The Reagent Bank modifier key is currently set to '.. C_KW .. cap(a.db.modifier_rea) .. '. \124rAvoid setting your main modifier to the same key, or change the Reagent Bank modifier key with ' .. C_KW .. '/mea rea\124r (e.g. ' .. C_KW .. '/mea rea control\124r).'
+		.. '\nThe ' .. C_EMPH ..'reagent bank modifier key\124r is currently set to '.. C_KW .. cap(a.db.modifier_rea) .. '. \124rAvoid setting your main modifier to the same key, or change the reagent bank modifier key with ' .. C_KW .. '/mea rea\124r (e.g. ' .. C_KW .. '/mea rea control\124r).'
 		)
 		print(MSG_PREFIX,
-			'--> The ' .. C_EMPH .. 'Reagent Bank modifier key\124r is ' .. C_EMPH .. 'needed\124r to send items to the Reagent Bank, ' .. C_EMPH .. 'if\124r you are using a bag addon that replaces the Blizz Reagent Bank frame with its own. \nBut it is also useful for the standard bag, as it allows you to send items to the Reagent Bank without actually switching to the frame.'
+			'Info: The ' .. C_EMPH .. 'reagent bank modifier key\124r is ' .. C_EMPH .. 'needed\124r to send items to the reagent bank, ' .. C_EMPH .. 'if\124r you are using a bag addon that replaces the Blizz reagent bank frame with its own. (But it can also be useful for the standard bag, as it allows you to send items to the reagent bank without actually switching to the frame.)'
+		)
+		print(MSG_PREFIX,
+			'Type ' .. C_KW .. '/mea help delay\124r for help on changing the guild bank delay and the global delay.'
+		)
+	elseif wants_help(mt[1]) and mt[2] == 'delay' then
+		print(MSG_PREFIX,
+			C_EMPH .. 'Guild bank delay:\124r Mass transfers to the guild bank need to be throttled. The default delay is ' .. C_EMPH .. DELAY_GB_DEFAULT .. 's\124r. You can change the delay with ' .. C_KW .. '/mea gb <delay>\124r, for example ' .. C_KW .. '/mea gb 0.45\124r sets the delay to 0.45 seconds. Allowed values are ' .. C_EMPH .. '> 0\124r and ' .. C_EMPH .. '<= 1\124r. Any number outside the allowed range will disable the delay (not recommended!).'
+		)
+		print(MSG_PREFIX,
+			C_EMPH .. 'Global delay:\124r Analogous to the guild bank delay, you can set a global delay with ' .. C_KW .. '/mea all! <delay>\124r. The global delay is disabled by default, and ' .. C_EMPH .. 'you should not set one!\124r You may want to try it only if you are experiencing significant server lag that is affecting the smooth operation of MEA. (Note: If the global delay is longer than the guild bank delay, it will override the guild bank delay.)'
 		)
 	else
 		print(MSG_PREFIX, 'That was not a valid input. Type', C_KW .. '/mea h\124r for help.')
