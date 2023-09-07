@@ -1,6 +1,6 @@
-## Interface: 100105
+## Interface: 100107
 ## Title: Move 'em All
-## Version: 2.0.2
+## Version: 2.1
 ## IconTexture: Interface/Buttons/JumpUpArrow
 ## Notes: One-click mass move all items with the same ID to the bank or other locations.
 ## Author: Mot
@@ -12,7 +12,7 @@
 # LoadOnDemand:
 
 # X-Wago-ID:
-# X-Curse-Project-ID: 860446
+## X-Curse-Project-ID: 860446
 
 ## SavedVariables: mea_database
 # SavedVariablesPerCharacter:
@@ -43,4 +43,3 @@ main.lua
 # this program. If not, see <https://www.gnu.org/licenses/>.
 #
 # ==============================================================================
-

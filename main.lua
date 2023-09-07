@@ -100,6 +100,8 @@ ef:SetScript('OnEvent', function(self, event, ...)
 			a.db.modifier = a.db.modifier or (is_mac and 'command' or 'shift')
 			a.db.modifier_rea = a.db.modifier_rea or (is_mac and 'option' or 'alt')
 			a.db.delay_normal = a.db.delay_normal or nil
+			-- Will also reset to default if the user had set it to none. This is good, because as of now guild bank
+			-- transfers will not work without any delay.
 			a.db.delay_guildbank = a.db.delay_guildbank or DELAY_GB_DEFAULT
 		end
 	elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then

@@ -1,3 +1,21 @@
+#### 2.1 (2023-09-07)
+
+- You can now set the guild bank delay with `/mea gb <delay>`. For example `/mea gb 0.45`. Default is 0.6s.
+  - The maximum you can set is `1`. `/mea gb 0` (or any number outside the valid range) removes the delay entirely.
+- Changed the command to set the global delay (all targets) to `/mea all! <delay>`.
+  - The global delay is not enabled by default, and there should be no need to enable it!
+  - You may want to try it if you are experiencing significant server lag that is affecting the smooth operation of MEA.
+  - If the global delay is longer than the guild bank delay, it will override the guild bank delay.
+- Overhauled in-game help (`/mea h`).
+- Added help for delays (`/mea h delay`).
+- Improved detection of closed target frame during interaction.
+- "Aborting" msg when frame gets closed during transfer.
+- Preventing nil math if guild bank delay is disabled.
+- Different action feedback msg for delayed transfers ("Trying to move…" instead of "Probably moved…").
+- Minor optimizaions.
+- Updated Readme.
+- toc bump to 100107.
+
 #### 2.0.2 (2023-07-23)
 
 - Some code fixes.

@@ -58,7 +58,11 @@ While intended as a workaround, this modifier key actually has a useful side eff
 
 With version 1 of MEA, mass moving things to the guild bank was disabled because the guild bank has such a slow response time that I would have to implement a throttling system just for that.
 
-New _and experimental:_ With v2.0, the Guild Bank is now enabled as mass move target. Using a very primitive throttling, the items are moved with a delay of 0.6s. This seems to work so far, though sometimes it happens that not all items are moved with one click.
+Since v2.0, the Guild Bank is now enabled as mass move target. Using a very primitive throttling, the items are moved with a delay of 0.6s. This seems to work so far, though sometimes it happens that not all items are moved with one click.
+
+You can change the default delay (o.6s) with `/mea gb <delay>` (for example `/mea gb 0.45`). You can set anything > 0 and <= 1. `/mea gb 0` (or any number outside the valid range) removes the delay entirely (not recommended).
+
+The sweet spot seems to be somewhere around 0.5/0.6s. The longer the delay, the more reliable the mass movement will be (fewer failed moves). However, if you usually move a small number of items (less than 10 slots), or the guild bank on your server is faster than mine, you may want to play around with shorter delays.
 
 ## Compatibility
 
