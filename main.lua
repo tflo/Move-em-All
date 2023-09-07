@@ -115,15 +115,25 @@ end)
 ---------------------------------------------------------------------------]]--
 
 local function use_items(bag, item)
+	local aborting_msg_sent = nil
 	for slot = 1, C_ContainerGetContainerNumSlots(bag) do
-		if not valid_targets[pimf] then return end
+		if not valid_targets[pimf] then
+			print(MSG_PREFIX, 'Target frame closed, aborting transfer.')
+			return
+		end
 		local bag_item = C_ContainerGetContainerItemID(bag, slot)
 		if bag_item == item then
 -- 			debugprint('Count:', count, 'Bag:', bag, 'Slot:', slot)
 			if delay then
 				wait = delay * count
 				C_TimerAfter(wait, function()
-					C_ContainerUseContainerItem(bag, slot, nil, to_reabank)
+					-- We *have* to check here again, as target frame can be closed while there are still timers in the  queue.
+					if valid_targets[pimf] then
+						C_ContainerUseContainerItem(bag, slot, nil, to_reabank)
+					elseif not aborting_msg_sent then
+						print(MSG_PREFIX, 'Target frame closed, aborting transfer.')
+						aborting_msg_sent = true
+					end
 				end)
 			else
 				C_ContainerUseContainerItem(bag, slot, nil, to_reabank)
