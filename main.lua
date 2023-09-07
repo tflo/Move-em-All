@@ -169,7 +169,7 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 						use_items(bag, clicked_item)
 					end
 				end
-				print(MSG_PREFIX, 'Probably moved', count .. 'x', link .. '.')
+				print(MSG_PREFIX, delay and 'Trying to move' or 'Probably moved', count .. 'x', link .. '.')
 			end
 		end
 	end
