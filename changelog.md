@@ -1,3 +1,8 @@
+#### 2.1.1 (2023-09-27)
+
+- Added info to the readme that it also works with the TSM (TradeSkillMaster) mailbox, which may not have been obvious.
+- Other corrections to the readme.
+
 #### 2.1 (2023-09-07)
 
 - You can now set the guild bank delay with `/mea gb <delay>`. For example `/mea gb 0.45`. Default is 0.6s.

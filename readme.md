@@ -60,15 +60,15 @@ With version 1 of MEA, mass moving things to the guild bank was disabled because
 
 Since v2.0, the Guild Bank is now enabled as mass move target. Using a very primitive throttling, the items are moved with a delay of 0.6s. This seems to work so far, though sometimes it happens that not all items are moved with one click.
 
-You can change the default delay (o.6s) with `/mea gb <delay>` (for example `/mea gb 0.45`). You can set anything > 0 and <= 1. `/mea gb 0` (or any number outside the valid range) removes the delay entirely (not recommended).
+You can change the default delay (0.6s) with `/mea gb <delay>` (for example `/mea gb 0.45`). You can set anything > 0 and <= 1. `/mea gb 0` (or any number outside the valid range) removes the delay entirely (not recommended).
 
 The sweet spot seems to be somewhere around 0.5/0.6s. The longer the delay, the more reliable the mass movement will be (fewer failed moves). However, if you usually move a small number of items (less than 10 slots), or the guild bank on your server is faster than mine, you may want to play around with shorter delays.
 
 ## Compatibility
 
-MEA works flawlessly with _Blizzard’s bags_ and with _AdiBags,_ very likely also with many other bag addons. I briefly tested it with: _ArkInventory, Baud Bag, LiteBag, Bagnon,_ and haven’t noticed any issues. (By the way, LiteBag uses the standard Blizz Reagent Bank frame, which is an advantage here.)
+MEA works flawlessly with _Blizzard’s bags, LiteBag, AdiBags,_ very likely also with many other bag addons. I briefly tested it with _ArkInventory, Baud Bag, Bagnon,_ and haven’t noticed any issues. (By the way, LiteBag uses the standard Blizz Reagent Bank frame, which is an advantage here.)
 
-It works fine with _Easy Mail_ and _Postal_ too.
+It works great with _TSM Mail, Easy Mail, Postal_ too, probably also with other mailbox mods.
 
 ## Notes
 
