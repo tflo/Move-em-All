@@ -1,3 +1,7 @@
+#### 2.1.2 (2023-11-08)
+
+- toc update 100200; no content changes.
+
 #### 2.1.1 (2023-09-27)
 
 - Added info to the readme that it also works with the TSM (TradeSkillMaster) mailbox, which may not have been obvious.
