@@ -30,7 +30,7 @@ local MSG_PREFIX = C_MEA .. "Move 'em All\124r:"
 
 local DELAY_GB_DEFAULT = 0.6
 local is_mac = IsMacClient()
-local pimf, count, wait, delay, to_reabank
+local pimf, aborting_msg_sent, count, wait, delay, to_reabank
 
 local modifiers = {
 	['command'] = IsMetaKeyDown,
@@ -44,6 +44,11 @@ local buttons = {
 	['left'] = 'LeftButton',
 	['right'] = 'RightButton',
 }
+
+local function debugprint(...)
+	if debug then print(MSG_PREFIX, 'Debug:', ...) end
+end
+
 
 local function mea_modifier_down()
 	return modifiers[a.db.modifier]()
@@ -70,15 +75,26 @@ local PIMF_VOID = Enum.PlayerInteractionType.VoidStorageBanker -- 26
 
 local valid_targets = {
 	[PIMF_BANK] = true, -- Bank
-	[PIMF_MAIL] = true, -- Mail
+-- 	[PIMF_MAIL] = true, -- Mail; better to have an extra check, see `safe_to_run` func
 	[PIMF_GUILDBANK] = true, -- Guild bank
 	[PIMF_MERCHANT] = true, -- Merchant
 	[PIMF_TRADE] = true, -- Trade
 	[PIMF_VOID] = true, -- Void Storage
 }
 
-local function debugprint(...)
-	if debug then print(MSG_PREFIX, 'Debug:', ...) end
+local function safe_to_run()
+-- 	debugprint('PIMF:', pimf)
+	if valid_targets[pimf] then return true end
+	if pimf == PIMF_MAIL then
+		if a.db.disable_mail_safety or SendMailMailButton:IsVisible() then
+			return true
+		end
+	end
+	if not aborting_msg_sent then
+		print(MSG_PREFIX, 'No valid destination to move items to, aborting transfer!')
+		aborting_msg_sent = true
+	end
+	return false
 end
 
 
@@ -100,6 +116,7 @@ ef:SetScript('OnEvent', function(self, event, ...)
 			a.db.modifier = a.db.modifier or (is_mac and 'command' or 'shift')
 			a.db.modifier_rea = a.db.modifier_rea or (is_mac and 'option' or 'alt')
 			a.db.delay_normal = a.db.delay_normal or nil
+			a.db.disable_mail_safety = a.db.disable_mail_safety or nil
 			-- Will also reset to default if the user had set it to none. This is good, because as of now guild bank
 			-- transfers will not work without any delay.
 			a.db.delay_guildbank = a.db.delay_guildbank or DELAY_GB_DEFAULT
@@ -109,6 +126,7 @@ ef:SetScript('OnEvent', function(self, event, ...)
 	else
 		pimf = nil
 	end
+	debugprint('PIMF:', pimf)
 end)
 
 
@@ -117,25 +135,17 @@ end)
 ---------------------------------------------------------------------------]]--
 
 local function use_items(bag, item)
-	local aborting_msg_sent = nil
 	for slot = 1, C_ContainerGetContainerNumSlots(bag) do
-		if not valid_targets[pimf] then
-			print(MSG_PREFIX, 'Target frame closed, aborting transfer.')
-			return
-		end
+		if not safe_to_run() then return end
 		local bag_item = C_ContainerGetContainerItemID(bag, slot)
 		if bag_item == item then
 -- 			debugprint('Count:', count, 'Bag:', bag, 'Slot:', slot)
 			if delay then
 				wait = delay * count
 				C_TimerAfter(wait, function()
-					-- We *have* to check here again, as target frame can be closed while there are still timers in the  queue.
-					if valid_targets[pimf] then
-						C_ContainerUseContainerItem(bag, slot, nil, to_reabank)
-					elseif not aborting_msg_sent then
-						print(MSG_PREFIX, 'Target frame closed, aborting transfer.')
-						aborting_msg_sent = true
-					end
+					-- We *have* to check here again, since target frame can be closed while there are still timers in the  queue.
+					if not safe_to_run() then return end
+					C_ContainerUseContainerItem(bag, slot, nil, to_reabank)
 				end)
 			else
 				C_ContainerUseContainerItem(bag, slot, nil, to_reabank)
@@ -148,9 +158,10 @@ end
 hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 -- 	if mea_button_pressed() and (mea_modifier_down() or pimf == 8 and mea_modifier_rea_down()) then
 	if mea_button_pressed() and mea_modifier_down() then -- Probably better, to avoid conflicts
-		debugprint 'Button and modifier conditionals passed.'
-		if itemLocation and itemLocation:IsBagAndSlot() and valid_targets[pimf] then
-			debugprint 'itemLocation and target frame validation passed.'
+-- 		debugprint 'Button and modifier conditionals passed.'
+		aborting_msg_sent = nil
+		if itemLocation and itemLocation:IsBagAndSlot() and safe_to_run() then
+-- 			debugprint '`itemLocation` and `safe_to_run` passed.'
 -- 			debugprint(tf6.tprint(itemLocation))
 			local bag_id = itemLocation.bagID
 			local slot_id = itemLocation.slotIndex
@@ -158,7 +169,7 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 			if clicked_item then
 				count, wait = 0, 0
 				delay = pimf == PIMF_GUILDBANK and max(a.db.delay_guildbank or 0, a.db.delay_normal or 0) or a.db.delay_normal
-				debugprint('At work now. Active delay:', delay)
+-- 				debugprint('At work now. Active delay:', delay)
 				if bag_id >= BAG_FIRST and bag_id <= BAG_LAST then -- From bags
 					to_reabank = (pimf == PIMF_BANK and (mea_modifier_rea_down() or ReagentBankFrame:IsShown()))
 					for bag = BAG_FIRST, BAG_LAST do
@@ -223,12 +234,14 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 		local d = tonumber(mt[2])
 		a.db.delay_guildbank = (d > 0 and d <= 1) and d or nil
 		print(MSG_PREFIX, 'Delay for guild bank set to ' .. (a.db.delay_guildbank or 'none (no timer used)') .. '.')
+	elseif mt[1] == 'togglemailsafety' then
+		a.db.disable_mail_safety = not a.db.disable_mail_safety
+		print(MSG_PREFIX, 'Mail safety '.. (a.db.disable_mail_safety and 'disabled' or 'enabled') .. '.')
 	elseif mt[1] == 'debug' then
 		debug = not debug
 		print(MSG_PREFIX, 'Debug mode '.. (debug and 'enabled' or 'disabled') .. '.')
 	elseif #mt == 0 then
-		print(MSG_PREFIX, 'Current settings: Mouse button: '.. C_KW .. cap(a.db.button) .. ' \124r| Modifier key: ' .. C_KW .. cap(a.db.modifier).. ' \124r| Reagent bank modifier key: ' .. C_KW .. cap(a.db.modifier_rea) .. ' \124r| Delay: ' .. C_EMPH .. (a.db.delay_normal and a.db.delay_normal .. 's' or 'none') .. ' \124r| Delay for guild bank: ' .. C_EMPH .. (a.db.delay_guildbank and a.db.delay_guildbank .. 's' or 'none')
-		.. '\n\124rYou can freely customize mouse button and modifier keys. Type ' .. C_KW .. '/mea help\124r to learn how.'
+		print(MSG_PREFIX, 'Current settings: Mouse button: '.. C_KW .. cap(a.db.button) .. ' \124r| Modifier key: ' .. C_KW .. cap(a.db.modifier).. ' \124r| Reagent bank modifier key: ' .. C_KW .. cap(a.db.modifier_rea) .. ' \124r| Delay: ' .. C_EMPH .. (a.db.delay_normal and a.db.delay_normal .. 's' or 'none') .. ' \124r| Delay for guild bank: ' .. C_EMPH .. (a.db.delay_guildbank and a.db.delay_guildbank .. 's' or 'none') .. ' \124r| Mail safety: ' .. C_EMPH .. (a.db.disable_mail_safety and 'off' or 'on') .. '\n\124rYou can freely customize mouse button and modifier keys. Type ' .. C_KW .. '/mea help\124r to learn how.'
 		)
 	elseif wants_help(mt[1]) and #mt == 1 then
 		print(MSG_PREFIX,
@@ -261,7 +274,7 @@ end
 
 --[[ License ===================================================================
 
-	Copyright © 2023 Thomas Floeren
+	Copyright © 2024 Thomas Floeren
 
 	This file is part of Move'em All.
 

@@ -1,3 +1,11 @@
+#### 2.1.4 (2024-03-13)
+
+- Safer transfers to mailbox: Added a check to make sure we are in the Send Mail frame (not Inbox) when executing. Unfortunately, with this safeguard MEA no longer works with TSM Mail or any other mail addon where the Blizzard Send Mail button is not visible. (Though you can disable it, see below.)
+    - Background: If you right-click an item in your bags while the mailbox is open and you're still in the inbox, the item will be _used_ (i.e. consumed or equipped). This is standard Blizz behavior and not a bug in this addon. When you hold down your MEA modifier key, this default behavior is applied to all items with the same ID. So this safety should protect you from accidentally _using_ all items instead of sending them.
+    - I added this because the "accident" actually happened to me: I crafted 8 'Draconium Fisherfriend' and wanted to 1-click-move them to the mailbox to send them to my AH toon. Unfortunately, the inbox frame was active and I didn't pay attention, so the result of my click was that I equipped all 8 Fisherfriend, which turned them into garbage, as they are now soulbound...
+    - The same problem exists with the TSM mailbox, but I haven't found a reliable way to detect if we are in 'send mode', so this safeguard will effectively disable MEA for TSM mailing.
+    - If you are aware of the potential pitfall, you can disable (and re-enable) the safety with `/mea togglemailsafety`, which also restores functionality with TSM. Though I recommend to leave it enabled, and for mass-moving just switch to the Blizz Mail UI.
+
 #### 2.1.3 (2024-01-16)
 
 - Just a toc bump for 10.2.5. Compatibility update will follow if needed.

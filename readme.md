@@ -15,8 +15,8 @@ Currently the mass moving works from Bag to…
 - Mail
 - Merchant
 - Trade
-- Guild Bank (new since v2.0)
-- Void Storage  (new since v2.0)
+- Guild Bank
+- Void Storage
 
 …and from Bank to Bag.
 
@@ -43,6 +43,7 @@ The addon is lightweight, super fast - and dumb. (And I actually plan to keep it
 
 ‘Dumb’ means:
 
+- MEA simply applies the default right-click action to all items with the same ID. Of course, it only does this if it detects a valid destination to move the items to (e.g. open bank, merchant, mailbox, …).
 - It does not check if the clicked items actually have all arrived (e.g. when the bank is full). So, when it prints “Probably moved 12x [Shrouded Cloth]” to the chat, this is actually an optimistic estimation. Hence the “probably” word ;)
 - It doesn’t know or care if a bag slot holds a single item or a stack of 1000, it always reports back the number of slots it has “moved”, which can be stacks or single items.
 
@@ -68,7 +69,18 @@ The sweet spot seems to be somewhere around 0.5/0.6s. The longer the delay, the 
 
 MEA works flawlessly with _Blizzard’s bags, LiteBag, AdiBags,_ very likely also with many other bag addons. I briefly tested it with _ArkInventory, Baud Bag, Bagnon,_ and haven’t noticed any issues. (By the way, LiteBag uses the standard Blizz Reagent Bank frame, which is an advantage here.)
 
-It works great with _TSM Mail, Easy Mail, Postal_ too, probably also with other mailbox mods.
+It _can_ work (see below) with _TSM Mail, Easy Mail, Postal_ too, probably also with other mailbox mods.
+
+For safety reasons, as of version 2.1.4 (2024-03-13), MEA no longer works – out of the box – with TSM Mail or any mail addon that hides the Blizzard Send Mail button. See the 2.1.4 (2024-03-13) change notes to understand why.
+
+You can disable (and re-enable) the safety with `/mea togglemailsafety`, which will also restore functionality with TSM. 
+
+If you do this, please make sure that the Send Mail UI (not the Inbox!) of Blizz Mail (or whatever Mail addon) is actually active before clicking on an item with MEA. If the Inbox is active (and the safety disabled), the item(s) will be _used_ (consumed or equipped) instead of being sent! (With some item types you may get an “Action Blocked” popup (taint), which is a good thing in this particular case.)
+
+I recommend to leave the safety enabled, and for mass-moving just switch to the Blizz Mail UI.
+
+Please note that the described behavior is not a bug in MEA, this is the standard Blizz behavior when you right-click an item against the Mail inbox. The thing is, with MEA, the consequences of such a misclick can be more dire, since it potentially affects multiple items. Hence the protection. (Actually, with the protection, MEA is safer than Blizz’s default behavior, since a MEA click does absolutely nothing when the inbox frame is active.)
+  
 
 ## Notes
 
