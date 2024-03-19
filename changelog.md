@@ -1,3 +1,7 @@
+#### 2.1.5 (2024-03-19)
+
+- toc bump only. If necessary, the addon will be updated in the next days.
+
 #### 2.1.4 (2024-03-13)
 
 - Safer transfers to mailbox: Added a check to make sure we are in the Send Mail frame (not Inbox) when executing. Unfortunately, with this safeguard MEA no longer works with TSM Mail or any other mail addon where the Blizzard Send Mail button is not visible. (Though you can disable it, see below.)
