@@ -1,18 +1,14 @@
-## Interface: 100207
+## Interface: 110002, 110000
 ## Title: Move 'em All
-## Version: 2.1.6
+## Version: 2.1.7
 ## IconTexture: Interface/Buttons/JumpUpArrow
 ## Notes: One-click mass move all items with the same ID to the bank or other locations.
-## Author: Mot
-
-# Dependencies:
-# OptionalDeps:
-# LoadWith:
-# LoadOnDemand:
-
+## Author: Mot (@6mot, @tflo)
 # X-Wago-ID:
 ## X-Curse-Project-ID: 860446
-
+## X-Category: Bags, Utility, Miscellaneous
+## X-License: GPLv3
+## X-Localizations: enUS
 ## SavedVariables: mea_database
 # SavedVariablesPerCharacter:
 
@@ -27,7 +23,7 @@ main.lua
 
 # License ======================================================================
 #
-# Copyright © 2023 Thomas Floeren
+# Copyright © 2023-2024 Thomas Floeren
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software

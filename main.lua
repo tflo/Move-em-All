@@ -145,10 +145,10 @@ local function use_items(bag, item)
 				C_TimerAfter(wait, function()
 					-- We *have* to check here again, since target frame can be closed while there are still timers in the  queue.
 					if not safe_to_run() then return end
-					C_ContainerUseContainerItem(bag, slot, nil, to_reabank)
+					C_ContainerUseContainerItem(bag, slot, nil, nil, to_reabank)
 				end)
 			else
-				C_ContainerUseContainerItem(bag, slot, nil, to_reabank)
+				C_ContainerUseContainerItem(bag, slot, nil, nil, to_reabank)
 			end
 			count = count + 1
 		end

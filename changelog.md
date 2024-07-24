@@ -1,3 +1,10 @@
+#### 2.1.7 (2024-07-24)
+
+- Should now work with TWW bank (normal and reagent). Cannot test with Warband Bank as it is currently unavailable in my region.
+- Guild bank is fine too.
+- More tests will follow.
+- toc updated for TWW 110000.
+
 #### 2.1.6 (2024-05-08)
 
 - toc bump only (100207). Addon update will follow as needed.
