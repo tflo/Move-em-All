@@ -1,3 +1,9 @@
+To see all commits, including alpha-version changes, go [here](https://github.com/tflo/Move-em-All/commits/master/).
+
+---
+
+## Releases
+
 #### 2.1.7 (2024-07-24)
 
 - Should now work with TWW bank (normal and reagent). Cannot test with Warband Bank as it is currently unavailable in my region.

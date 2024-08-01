@@ -13,8 +13,9 @@ local C_ContainerGetContainerItemID = _G.C_Container.GetContainerItemID
 local C_ContainerUseContainerItem = _G.C_Container.UseContainerItem
 local C_TimerAfter = C_Timer.After
 
--- See https://wowpedia.fandom.com/wiki/BagID
--- Bags: Should be continuous from bag 0 to reagent bag (5) - as of wow 10.1
+-- https://wowpedia.fandom.com/wiki/BagID
+-- https://www.townlong-yak.com/framexml/55824/go/Blizzard_APIDocumentationGenerated/BagIndexConstantsDocumentation.lua#16
+-- Bags: Should be continuous from bag 0 to reagent bag (5) - as of wow 11.0.0
 local BAG_FIRST = BACKPACK_CONTAINER
 local BAG_LAST = BACKPACK_CONTAINER + NUM_BAG_SLOTS + 1
 -- Bank: Not continuous: -3 for reagent bank, -1 for bank container, then 6 to 12 - as of wow 10.1
