@@ -1,8 +1,13 @@
-To see all commits, including alpha-version changes, go [here](https://github.com/tflo/Move-em-All/commits/master/).
+To see all commits, including all alpha changes, [*go here*](https://github.com/tflo/PetWalker/commits/master/).
 
 ---
 
 ## Releases
+
+#### 2.1.8 (2024-10-23)
+
+- toc bump, docs.
+- No content changes.
 
 #### 2.1.7 (2024-07-24)
 
