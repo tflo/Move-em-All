@@ -13,7 +13,7 @@ local C_ContainerGetContainerItemID = _G.C_Container.GetContainerItemID
 local C_ContainerUseContainerItem = _G.C_Container.UseContainerItem
 local C_TimerAfter = C_Timer.After
 
--- https://wowpedia.fandom.com/wiki/BagID
+-- https://warcraft.wiki.gg/wiki/BagID
 -- https://www.townlong-yak.com/framexml/55824/go/Blizzard_APIDocumentationGenerated/BagIndexConstantsDocumentation.lua#16
 -- Bags: Should be continuous from bag 0 to reagent bag (5) - as of wow 11.0.0
 local BAG_FIRST = BACKPACK_CONTAINER
@@ -30,6 +30,7 @@ local ACCOUNT_LAST = Enum.BagIndex.AccountBankTab_5
 local C_MEA = '\124cff2196f3'
 local C_KW = '\124cnORANGE_FONT_COLOR:'
 local C_EMPH = '\124cnYELLOW_FONT_COLOR:'
+local C_DEBUG = '\124cFFFF2F92'
 local MSG_PREFIX = C_MEA .. "Move 'em All\124r:"
 
 local DELAY_GB_DEFAULT = 0.6
@@ -50,7 +51,7 @@ local buttons = {
 }
 
 local function debugprint(...)
-	if debug then print(MSG_PREFIX, 'Debug:', ...) end
+	if debug then print(MSG_PREFIX, C_DEBUG..'Debug:', ...) end
 end
 
 
@@ -184,36 +185,27 @@ local function dest_banktype()
 	end
 end
 
+
+-- https://warcraft.wiki.gg/wiki/ItemLocationMixin
+-- https://github.com/search?q=repo%3Atomrus88%2FBlizzardInterfaceCode%20HandleModifiedItemClick&type=code
+-- https://github.com/tomrus88/BlizzardInterfaceCode/blob/b48960a18c973f40f0d04a8e5021270733cfb38b/Interface/AddOns/Blizzard_ItemButton/Mainline/ItemButtonTemplate.lua#L380
+
 hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 -- 	if mea_button_pressed() and (mea_modifier_down() or pimf == 8 and mea_modifier_rea_down()) then
 	if mea_button_pressed() and mea_modifier_down() then -- Probably better, to avoid conflicts
--- 		debugprint 'Button and modifier conditionals passed.'
+		debugprint 'Button and modifier conditionals passed.'
 		aborting_msg_sent = nil
+		-- XXX: Baganator account bank does not give itemLocation
 		if itemLocation and itemLocation:IsBagAndSlot() and safe_to_run() then
--- 			debugprint '`itemLocation` and `safe_to_run` passed.'
--- 			debugprint(tf6.tprint(itemLocation))
+-- 			debugprint(DevTools_Dump(itemLocation))
 			local bag_id = itemLocation.bagID
 			local slot_id = itemLocation.slotIndex
+			debugprint('`itemLocation` and `safe_to_run` passed; Bag ID:', bag_id, '; Slot ID:', slot_id, '; Link:', link)
 			local clicked_item = C_ContainerGetContainerItemID(bag_id, slot_id)
 			if clicked_item then
 				count, wait = 0, 0
 				delay = pimf == PIMF_GUILDBANK and max(a.db.delay_guildbank or 0, a.db.delay_normal or 0) or a.db.delay_normal
 				debugprint('At work now. Active delay:', delay)
-				debugprint(
-					'bag_id', bag_id,
-					'; slot_id', slot_id,
-					'; clicked_item', clicked_item,
-					'; BAG_FIRST', BAG_FIRST,
-					'; BAG_LAST', BAG_LAST,
-					'; BANK_CONTAINER', BANK_CONTAINER,
-					'; BANK_FIRST', BANK_FIRST,
-					'; BANK_LAST', BANK_LAST,
-					'; BANK_REA', BANK_REA,
-					'; ACCOUNT_FIRST', ACCOUNT_FIRST,
-					'; ACCOUNT_LAST', ACCOUNT_LAST,
-					'; to_reabank', to_reabank,
-					'; banktype', banktype
-				)
 				if from_bags(bag_id) then
 					local banktype = dest_banktype()
 					local rea = pimf == PIMF_BANK and dest_is_reagentbag()
