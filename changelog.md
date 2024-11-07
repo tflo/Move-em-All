@@ -4,6 +4,14 @@ To see all commits, including all alpha changes, [*go here*](https://github.com/
 
 ## Releases
 
+#### 2.2.0 (2024-11-07)
+
+- Works now with the Warband Bank (account bank).
+    - *From Bags to Warband Bank:* Tested with Blizz UI and Baganator; probably/possibly also works with other addons, but not (yet) tested!
+    - *From Warband Bank to Bags:* Tested with Blizz UI; does *not* work with Baganator; not (yet) tested with other addons!
+        - Note: Baganator comes with its own mass-transfer functionality. Use this for transfers from Baganator Warband Bank to Bags.
+- Some code optimization and cleanup.
+
 #### 2.1.8 (2024-10-23)
 
 - toc bump, docs.
