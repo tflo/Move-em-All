@@ -24,6 +24,9 @@ local BANK_CONTAINER = BANK_CONTAINER
 local BANK_FIRST = NUM_TOTAL_EQUIPPED_BAG_SLOTS + 1
 local BANK_LAST = NUM_TOTAL_EQUIPPED_BAG_SLOTS + NUM_BANKBAGSLOTS
 
+local ACCOUNT_FIRST = Enum.BagIndex.AccountBankTab_1
+local ACCOUNT_LAST = Enum.BagIndex.AccountBankTab_5
+
 local C_MEA = '\124cff2196f3'
 local C_KW = '\124cnORANGE_FONT_COLOR:'
 local C_EMPH = '\124cnYELLOW_FONT_COLOR:'
@@ -31,7 +34,7 @@ local MSG_PREFIX = C_MEA .. "Move 'em All\124r:"
 
 local DELAY_GB_DEFAULT = 0.6
 local is_mac = IsMacClient()
-local pimf, aborting_msg_sent, count, wait, delay, to_reabank
+local pimf, aborting_msg_sent, count, wait, delay
 
 local modifiers = {
 	['command'] = IsMetaKeyDown,
@@ -135,7 +138,7 @@ end)
 	§ Main
 ---------------------------------------------------------------------------]]--
 
-local function use_items(bag, item)
+local function use_items(bag, item, to_banktype, to_reabank)
 	for slot = 1, C_ContainerGetContainerNumSlots(bag) do
 		if not safe_to_run() then return end
 		local bag_item = C_ContainerGetContainerItemID(bag, slot)
@@ -146,13 +149,38 @@ local function use_items(bag, item)
 				C_TimerAfter(wait, function()
 					-- We *have* to check here again, since target frame can be closed while there are still timers in the  queue.
 					if not safe_to_run() then return end
-					C_ContainerUseContainerItem(bag, slot, nil, nil, to_reabank)
+					C_ContainerUseContainerItem(bag, slot, nil, to_banktype, to_reabank)
 				end)
 			else
-				C_ContainerUseContainerItem(bag, slot, nil, nil, to_reabank)
+				C_ContainerUseContainerItem(bag, slot, nil, to_banktype, to_reabank)
 			end
 			count = count + 1
 		end
+	end
+end
+
+
+local function from_bags(bagid)
+	return bagid >= BAG_FIRST and bagid <= BAG_LAST
+end
+
+local function from_char_bank(bagid)
+	return bagid >= BANK_FIRST and bagid <= BANK_LAST or bagid == BANK_CONTAINER or bagid == BANK_REA
+end
+
+local function from_account_bank(bagid)
+	return bagid >= ACCOUNT_FIRST and bagid <= ACCOUNT_LAST
+end
+
+local function dest_is_reagentbag()
+	return mea_modifier_rea_down() or ReagentBankFrame and ReagentBankFrame:IsShown() or BankFrame and BankFrame.activeTabIndex == 2
+end
+
+-- bankType: 0 = character; 1 = guild; 2 = account
+
+local function dest_banktype()
+	if BankFrame and (BankFrame:GetActiveBankType() == 2 or BankFrame.activeTabIndex == 3) then
+		return 2
 	end
 end
 
@@ -170,16 +198,36 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 			if clicked_item then
 				count, wait = 0, 0
 				delay = pimf == PIMF_GUILDBANK and max(a.db.delay_guildbank or 0, a.db.delay_normal or 0) or a.db.delay_normal
--- 				debugprint('At work now. Active delay:', delay)
-				if bag_id >= BAG_FIRST and bag_id <= BAG_LAST then -- From bags
-					to_reabank = (pimf == PIMF_BANK and (mea_modifier_rea_down() or ReagentBankFrame:IsShown()))
+				debugprint('At work now. Active delay:', delay)
+				debugprint(
+					'bag_id', bag_id,
+					'; slot_id', slot_id,
+					'; clicked_item', clicked_item,
+					'; BAG_FIRST', BAG_FIRST,
+					'; BAG_LAST', BAG_LAST,
+					'; BANK_CONTAINER', BANK_CONTAINER,
+					'; BANK_FIRST', BANK_FIRST,
+					'; BANK_LAST', BANK_LAST,
+					'; BANK_REA', BANK_REA,
+					'; ACCOUNT_FIRST', ACCOUNT_FIRST,
+					'; ACCOUNT_LAST', ACCOUNT_LAST,
+					'; to_reabank', to_reabank,
+					'; banktype', banktype
+				)
+				if from_bags(bag_id) then
+					local banktype = dest_banktype()
+					local rea = pimf == PIMF_BANK and dest_is_reagentbag()
 					for bag = BAG_FIRST, BAG_LAST do
-						use_items(bag, clicked_item)
+						use_items(bag, clicked_item, banktype, rea)
 					end
-				else -- From bank
+				elseif from_char_bank(bag_id) then
 					use_items(BANK_CONTAINER, clicked_item)
 					use_items(BANK_REA, clicked_item)
 					for bag = BANK_FIRST, BANK_LAST do
+						use_items(bag, clicked_item)
+					end
+				elseif from_account_bank(bag_id) then
+					for bag = ACCOUNT_FIRST, ACCOUNT_LAST do
 						use_items(bag, clicked_item)
 					end
 				end
