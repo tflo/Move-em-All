@@ -15,17 +15,19 @@ local C_TimerAfter = C_Timer.After
 
 -- https://warcraft.wiki.gg/wiki/BagID
 -- https://www.townlong-yak.com/framexml/55824/go/Blizzard_APIDocumentationGenerated/BagIndexConstantsDocumentation.lua#16
--- Bags: Should be continuous from bag 0 to reagent bag (5) - as of wow 11.0.0
-local BAG_FIRST = BACKPACK_CONTAINER
-local BAG_LAST = BACKPACK_CONTAINER + NUM_BAG_SLOTS + 1
--- Bank: Not continuous: -3 for reagent bank, -1 for bank container, then 6 to 12 - as of wow 10.1
-local BANK_REA = REAGENTBANK_CONTAINER
-local BANK_CONTAINER = BANK_CONTAINER
-local BANK_FIRST = NUM_TOTAL_EQUIPPED_BAG_SLOTS + 1
-local BANK_LAST = NUM_TOTAL_EQUIPPED_BAG_SLOTS + NUM_BANKBAGSLOTS
-
-local ACCOUNT_FIRST = Enum.BagIndex.AccountBankTab_1
-local ACCOUNT_LAST = Enum.BagIndex.AccountBankTab_5
+-- Bags: Should be contiguous from backpack (0) to reagent bag (5), but for correctness we treat them individually
+local idx_bags_container = BACKPACK_CONTAINER
+local idx_bags_rea = BACKPACK_CONTAINER + NUM_BAG_SLOTS + 1
+local idx_bags_first = BACKPACK_CONTAINER + 1
+local idx_bags_last = BACKPACK_CONTAINER + NUM_BAG_SLOTS
+-- Bank: Not contiguous: -3 for reagent bank, -1 for bank container, then 6 to 12
+local idx_charbank_container = BANK_CONTAINER
+local idx_charbank_rea = REAGENTBANK_CONTAINER
+local idx_charbank_first = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + 1
+local idx_charbank_last = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + NUM_BANKBAGSLOTS
+-- Account Bank: Contiguous from 13 to 17
+local idx_accountbank_first = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + NUM_BANKBAGSLOTS + 1
+local idx_accountbank_last = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + NUM_BANKBAGSLOTS + 5
 
 local C_MEA = '\124cff2196f3'
 local C_KW = '\124cnORANGE_FONT_COLOR:'
@@ -162,15 +164,15 @@ end
 
 
 local function from_bags(bagid)
-	return bagid >= BAG_FIRST and bagid <= BAG_LAST
+	return bagid >= idx_bags_first and bagid <= idx_bags_last or bagid == idx_bags_container or bagid == idx_bags_rea
 end
 
 local function from_char_bank(bagid)
-	return bagid >= BANK_FIRST and bagid <= BANK_LAST or bagid == BANK_CONTAINER or bagid == BANK_REA
+	return bagid >= idx_charbank_first and bagid <= idx_charbank_last or bagid == idx_charbank_container or bagid == idx_charbank_rea
 end
 
 local function from_account_bank(bagid)
-	return bagid >= ACCOUNT_FIRST and bagid <= ACCOUNT_LAST
+	return bagid >= idx_accountbank_first and bagid <= idx_accountbank_last
 end
 
 local function dest_is_reagentbag()
@@ -209,17 +211,19 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 				if from_bags(bag_id) then
 					local banktype = dest_banktype()
 					local rea = pimf == PIMF_BANK and dest_is_reagentbag()
-					for bag = BAG_FIRST, BAG_LAST do
+					use_items(idx_bags_container, clicked_item, banktype, rea)
+					use_items(idx_bags_rea, clicked_item, banktype, rea)
+					for bag = idx_bags_first, idx_bags_last do
 						use_items(bag, clicked_item, banktype, rea)
 					end
 				elseif from_char_bank(bag_id) then
-					use_items(BANK_CONTAINER, clicked_item)
-					use_items(BANK_REA, clicked_item)
-					for bag = BANK_FIRST, BANK_LAST do
+					use_items(idx_charbank_container, clicked_item)
+					use_items(idx_charbank_rea, clicked_item)
+					for bag = idx_charbank_first, idx_charbank_last do
 						use_items(bag, clicked_item)
 					end
 				elseif from_account_bank(bag_id) then
-					for bag = ACCOUNT_FIRST, ACCOUNT_LAST do
+					for bag = idx_accountbank_first, idx_accountbank_last do
 						use_items(bag, clicked_item)
 					end
 				end
