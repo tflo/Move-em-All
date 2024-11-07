@@ -185,6 +185,7 @@ local function dest_banktype()
 	if BankFrame and (BankFrame:GetActiveBankType() == 2 or BankFrame.activeTabIndex == 3) then
 		return 2
 	end
+	return 0
 end
 
 
@@ -209,7 +210,8 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 				delay = pimf == PIMF_GUILDBANK and max(a.db.delay_guildbank or 0, a.db.delay_normal or 0) or a.db.delay_normal
 				debugprint('At work now. Active delay:', delay)
 				if from_bags(bag_id) then
-					local banktype = dest_banktype()
+					-- No idea if bankType 1 for guildbank has any effect
+					local banktype = pimf == PIMF_BANK and dest_banktype() or pimf == PIMF_GUILDBANK and 1 or 0
 					local rea = pimf == PIMF_BANK and dest_is_reagentbag()
 					use_items(idx_bags_container, clicked_item, banktype, rea)
 					use_items(idx_bags_rea, clicked_item, banktype, rea)
