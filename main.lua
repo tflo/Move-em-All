@@ -1,6 +1,12 @@
 local addon_name, a = ...
 mea_database = mea_database or {}
 
+-- TODO:
+-- Since recently (May 2025) I noticed that I have to keep the mouse button pressed for 0.5s or so.
+-- Unclear when this started, and if it depends on Baganator, on server lag, on a change introduced with 11.1.5,
+-- if it's a Mac issue, or if it's my mouse, or whatever.
+-- Removing `mea_button_pressed()` from the main conditional (so only testing for the modifier key) doesn't change anything.
+
 --[[---------------------------------------------------------------------------
 	§ Definitions, references
 ---------------------------------------------------------------------------]]--
