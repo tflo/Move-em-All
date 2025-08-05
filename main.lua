@@ -7,6 +7,9 @@ mea_database = mea_database or {}
 -- if it's a Mac issue, or if it's my mouse, or whatever.
 -- Removing `mea_button_pressed()` from the main conditional (so only testing for the modifier key) doesn't change anything.
 
+
+-- 11.2: https://warcraft.wiki.gg/wiki/Patch_11.2.0/API_changes
+
 --[[---------------------------------------------------------------------------
 	§ Definitions, references
 ---------------------------------------------------------------------------]]--
@@ -84,7 +87,6 @@ local PIMF_MAIL = Enum.PlayerInteractionType.MailInfo -- 17
 local PIMF_GUILDBANK = Enum.PlayerInteractionType.GuildBanker -- 10
 local PIMF_MERCHANT = Enum.PlayerInteractionType.Merchant -- 5
 local PIMF_TRADE = Enum.PlayerInteractionType.TradePartner -- 1
-local PIMF_VOID = Enum.PlayerInteractionType.VoidStorageBanker -- 26
 
 local valid_targets = {
 	[PIMF_BANK] = true, -- Bank
@@ -92,7 +94,6 @@ local valid_targets = {
 	[PIMF_GUILDBANK] = true, -- Guild bank
 	[PIMF_MERCHANT] = true, -- Merchant
 	[PIMF_TRADE] = true, -- Trade
-	[PIMF_VOID] = true, -- Void Storage
 }
 
 local function safe_to_run()
