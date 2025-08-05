@@ -73,10 +73,6 @@ local function mea_button_pressed()
 	return btn == buttons[a.db.button]
 end
 
-local function mea_modifier_rea_down()
-	return modifiers[a.db.modifier_rea]()
-end
-
 
 -- https://github.com/Ketho/BlizzardInterfaceResources/blob/mainline/Resources/LuaEnum.lua
 
@@ -146,7 +142,7 @@ end)
 	§ Main
 ---------------------------------------------------------------------------]]--
 
-local function use_items(bag, item, to_banktype, to_reabank)
+local function use_items(bag, item, to_banktype)
 	for slot = 1, C_ContainerGetContainerNumSlots(bag) do
 		if not safe_to_run() then return end
 		local bag_item = C_ContainerGetContainerItemID(bag, slot)
@@ -157,10 +153,10 @@ local function use_items(bag, item, to_banktype, to_reabank)
 				C_TimerAfter(wait, function()
 					-- We *have* to check here again, since target frame can be closed while there are still timers in the  queue.
 					if not safe_to_run() then return end
-					C_ContainerUseContainerItem(bag, slot, nil, to_banktype, to_reabank)
+					C_ContainerUseContainerItem(bag, slot, nil, to_banktype)
 				end)
 			else
-				C_ContainerUseContainerItem(bag, slot, nil, to_banktype, to_reabank)
+				C_ContainerUseContainerItem(bag, slot, nil, to_banktype)
 			end
 			count = count + 1
 		end
@@ -180,10 +176,6 @@ local function from_account_bank(bagid)
 	return bagid >= idx_accountbank_first and bagid <= idx_accountbank_last
 end
 
-local function dest_is_reagentbag()
-	return mea_modifier_rea_down() or ReagentBankFrame and ReagentBankFrame:IsShown() or BankFrame and BankFrame.activeTabIndex == 2
-end
-
 -- bankType: 0 = character; 1 = guild; 2 = account
 
 local function dest_banktype()
@@ -199,8 +191,7 @@ end
 -- https://github.com/tomrus88/BlizzardInterfaceCode/blob/b48960a18c973f40f0d04a8e5021270733cfb38b/Interface/AddOns/Blizzard_ItemButton/Mainline/ItemButtonTemplate.lua#L380
 
 hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
--- 	if mea_button_pressed() and (mea_modifier_down() or pimf == 8 and mea_modifier_rea_down()) then
-	if mea_button_pressed() and mea_modifier_down() then -- Probably better, to avoid conflicts
+	if mea_button_pressed() and mea_modifier_down() then
 		debugprint 'Button and modifier conditionals passed.'
 		aborting_msg_sent = nil
 		-- XXX: Baganator account bank does not give itemLocation
@@ -217,11 +208,10 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 				if from_bags(bag_id) then
 					-- No idea if bankType 1 for guildbank has any effect
 					local banktype = pimf == PIMF_BANK and dest_banktype() or pimf == PIMF_GUILDBANK and 1 or nil
-					local rea = pimf == PIMF_BANK and dest_is_reagentbag() or nil
-					use_items(idx_bags_container, clicked_item, banktype, rea)
-					use_items(idx_bags_rea, clicked_item, banktype, rea)
+					use_items(idx_bags_container, clicked_item, banktype)
+					use_items(idx_bags_rea, clicked_item, banktype)
 					for bag = idx_bags_first, idx_bags_last do
-						use_items(bag, clicked_item, banktype, rea)
+						use_items(bag, clicked_item, banktype)
 					end
 				elseif from_char_bank(bag_id) then
 					for bag = idx_charbank_first, idx_charbank_last do
