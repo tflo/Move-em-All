@@ -122,7 +122,6 @@ ef:SetScript('OnEvent', function(self, event, ...)
 			a.db = mea_database
 			a.db.button = a.db.button or 'right'
 			a.db.modifier = a.db.modifier or (is_mac and 'command' or 'shift')
-			a.db.modifier_rea = a.db.modifier_rea or (is_mac and 'option' or 'alt')
 			a.db.delay_normal = a.db.delay_normal or nil
 			a.db.disable_mail_safety = a.db.disable_mail_safety or nil
 			-- Will also reset to default if the user had set it to none. This is good, because as of now guild bank
@@ -237,7 +236,6 @@ end)
 Example       	Possible variants                   	Function
 /mea left     	left, right                         	Mouse btn
 /mea shift    	command, shift, option, control, alt	Modifier
-/mea rea shift	command, shift, option, control, alt	Reagent Bag modifier
 /mea all 0.6  	float > 0 and <= 1                  	Generic delay
 /mea gb 0.6   	float > 0 and <= 1                  	Guild bank delay (only used if greater than generic delay)
 ]]
@@ -260,9 +258,6 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 	elseif modifiers[mt[1]] then
 		a.db.modifier = mt[1]
 		print(MSG_PREFIX, 'Modifier key set to', C_KW .. cap(a.db.modifier), '\124rkey.')
-	elseif mt[1] == 'rea' and modifiers[mt[2]] then
-		a.db.modifier_rea = mt[2]
-		print(MSG_PREFIX, 'Reagent bank modifier key set to', C_KW .. cap(a.db.modifier_rea), '\124rkey.')
 	elseif tonumber(mt[2]) and mt[1] == 'all!' then -- Delay global
 		local d = tonumber(mt[2])
 		a.db.delay_normal = (d > 0 and d <= 1) and d or nil
@@ -281,7 +276,7 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 		debug = not debug
 		print(MSG_PREFIX, 'Debug mode '.. (debug and 'enabled' or 'disabled') .. '.')
 	elseif #mt == 0 then
-		print(MSG_PREFIX, 'Current settings: Mouse button: '.. C_KW .. cap(a.db.button) .. ' \124r| Modifier key: ' .. C_KW .. cap(a.db.modifier).. ' \124r| Reagent bank modifier key: ' .. C_KW .. cap(a.db.modifier_rea) .. ' \124r| Delay: ' .. C_EMPH .. (a.db.delay_normal and a.db.delay_normal .. 's' or 'none') .. ' \124r| Delay for guild bank: ' .. C_EMPH .. (a.db.delay_guildbank and a.db.delay_guildbank .. 's' or 'none') .. ' \124r| Mail safety: ' .. C_EMPH .. (a.db.disable_mail_safety and 'off' or 'on') .. '\n\124rYou can freely customize mouse button and modifier keys. Type ' .. C_KW .. '/mea help\124r to learn how.'
+		print(MSG_PREFIX, 'Current settings: Mouse button: '.. C_KW .. cap(a.db.button) .. ' \124r| Modifier key: ' .. C_KW .. cap(a.db.modifier).. ' \124r| Delay: ' .. C_EMPH .. (a.db.delay_normal and a.db.delay_normal .. 's' or 'none') .. ' \124r| Delay for guild bank: ' .. C_EMPH .. (a.db.delay_guildbank and a.db.delay_guildbank .. 's' or 'none') .. ' \124r| Mail safety: ' .. C_EMPH .. (a.db.disable_mail_safety and 'off' or 'on') .. '\n\124rYou can freely customize mouse button and modifier keys. Type ' .. C_KW .. '/mea help\124r to learn how.'
 		)
 	elseif wants_help(mt[1]) and #mt == 1 then
 		print(MSG_PREFIX,
@@ -289,10 +284,6 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 		.. '\nleft\124r, ' .. C_KW .. 'right\124r | ' .. C_KW .. 'shift\124r, ' .. (is_mac and C_KW .. 'command\124r, ' or '') .. C_KW .. 'control\124r, ' .. C_KW .. (is_mac and 'option\124r.' or 'alt\124r.')
 		.. '\nExample: ' .. C_KW .. '/mea right\124r and ' .. C_KW .. '/mea shift\124r --> Shift-right-click.'
 		.. '\nDefaults are Command-right for macOS and Shift-right for Windows.'
-		.. '\nThe ' .. C_EMPH ..'reagent bank modifier key\124r is currently set to '.. C_KW .. cap(a.db.modifier_rea) .. '. \124rAvoid setting your main modifier to the same key, or change the reagent bank modifier key with ' .. C_KW .. '/mea rea\124r (e.g. ' .. C_KW .. '/mea rea control\124r).'
-		)
-		print(MSG_PREFIX,
-			'Info: The ' .. C_EMPH .. 'reagent bank modifier key\124r is ' .. C_EMPH .. 'needed\124r to send items to the reagent bank, ' .. C_EMPH .. 'if\124r you are using a bag addon that replaces the Blizz reagent bank frame with its own. (But it can also be useful for the standard bag, as it allows you to send items to the reagent bank without actually switching to the frame.)'
 		)
 		print(MSG_PREFIX,
 			'Type ' .. C_KW .. '/mea help delay\124r for help on changing the guild bank delay and the global delay.'
