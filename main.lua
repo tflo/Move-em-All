@@ -30,8 +30,6 @@ local idx_bags_rea = BACKPACK_CONTAINER + NUM_BAG_SLOTS + 1
 local idx_bags_first = BACKPACK_CONTAINER + 1
 local idx_bags_last = BACKPACK_CONTAINER + NUM_BAG_SLOTS
 -- Bank: Not contiguous: -3 for reagent bank, -1 for bank container, then 6 to 12
-local idx_charbank_container = BANK_CONTAINER
-local idx_charbank_rea = REAGENTBANK_CONTAINER
 local idx_charbank_first = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + 1
 local idx_charbank_last = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + NUM_BANKBAGSLOTS
 -- Account Bank: Contiguous from 13 to 17
@@ -175,7 +173,7 @@ local function from_bags(bagid)
 end
 
 local function from_char_bank(bagid)
-	return bagid >= idx_charbank_first and bagid <= idx_charbank_last or bagid == idx_charbank_container or bagid == idx_charbank_rea
+	return bagid >= idx_charbank_first and bagid <= idx_charbank_last
 end
 
 local function from_account_bank(bagid)
@@ -226,8 +224,6 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 						use_items(bag, clicked_item, banktype, rea)
 					end
 				elseif from_char_bank(bag_id) then
-					use_items(idx_charbank_container, clicked_item)
-					use_items(idx_charbank_rea, clicked_item)
 					for bag = idx_charbank_first, idx_charbank_last do
 						use_items(bag, clicked_item)
 					end
