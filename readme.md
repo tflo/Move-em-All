@@ -17,7 +17,6 @@ The price for this is a few (minor) caveats, which you can find in the "Caveats"
 - Merchant
 - Trade
 - Guild Bank
-- Void Storage
 
 …and from Char/Warband Bank to Bags.
 
@@ -31,8 +30,6 @@ Type `/mea` followed by one of these keywords: For the mouse button `left`, `rig
 `command` (macOS), `control`, `option` (macOS), `alt` (Windows).  
 
 Example: `/mea left` sets the mouse button to the left one, `/mea shift` sets the modifier key to Shift.
-
-In addition, MEA has a modifier key for moving stuff to the __Reagent Bank.__ You can customize it with `/mea rea`, for example `/mea rea control`. By __default,__ it’s set to __Alt/Option.__ More on that in the Caveats section below.
 
 If you type just `/mea`, it will show you the currently set mouse button and modifier keys. Type `/mea help` for the list of available keywords and other info.
 
@@ -48,13 +45,6 @@ The addon is lightweight, super fast - and dumb. (And I actually plan to keep it
 - It does not check if the clicked items actually have all arrived (e.g. when the bank is full). So, when it prints “Probably moved 12x [Shrouded Cloth]” to the chat, it means what is says: it’s an optimistic estimation. 
 - It doesn’t know or care if a bag slot holds a single item or a stack of 1000, it always reports back the number of slots it has “moved”, which can be stacks or single items.
 
-### Reagent Bank
-
-When moving stuff from the bags to the bank, by default, the addon moves reagents to the regular bank bags, not to the Reagent Bank. With the Blizz standard bank, it recognizes the Reagent Bank frame and moves the items there if the frame is visible.
-
-However, this does not work if a bag/bank addon replaces the Blizz Reagent Bank frame with its own. Unfortunately, the vast majority of bag addons does this. This is where the aforementioned _Reagent Bag modifier key_ comes into play: To mass move your items to the Reagent Bank, you have to hold down that additional modifier key.
-
-While intended as a workaround, this modifier key actually has a useful side effect: When the key is down, MEA moves items to the Reagent Bag even when the frame is not visible. This allows you to distribute items between the Reagent Bag and the normal bank without having to switch between the two frames.
 
 ### Guild bank
 
@@ -68,7 +58,7 @@ The sweet spot seems to be somewhere around 0.5/0.6s. The longer the delay, the 
 
 ## Compatibility
 
-MEA works flawlessly with _Blizzard’s bags, LiteBag, Baganator,_ very likely also with many other bag addons. I briefly tested it with _ArkInventory, Baud Bag, Bagnon,_ and haven’t noticed any issues. (By the way, LiteBag uses the standard Blizz Reagent Bank frame, which is an advantage here.)
+MEA works flawlessly with Blizzard’s bags, and – _at least before WoW TWW 11.2_ – with LiteBag, Baganator, very likely also with many other bag addons. I briefly tested it with ArkInventory, Baud Bag, Bagnon, and haven’t noticed any issues. 
 
 ### Warband Bank (added in MEA 2.2)
 
