@@ -29,12 +29,13 @@ local idx_bags_container = BACKPACK_CONTAINER
 local idx_bags_rea = BACKPACK_CONTAINER + NUM_BAG_SLOTS + 1
 local idx_bags_first = BACKPACK_CONTAINER + 1
 local idx_bags_last = BACKPACK_CONTAINER + NUM_BAG_SLOTS
--- Bank: Not contiguous: -3 for reagent bank, -1 for bank container, then 6 to 12
+-- Bank OLD: Not contiguous: -3 for reagent bank, -1 for bank container, then 6 to 12
+-- Bank 11.2: Not contiguous: Characterbanktab -2, CharacterBankTabs 6 to 11
 local idx_charbank_first = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + 1
-local idx_charbank_last = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + NUM_BANKBAGSLOTS
+local idx_charbank_last = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + Constants.InventoryConstants.NumCharacterBankSlots
 -- Account Bank: Contiguous from 13 to 17
-local idx_accountbank_first = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + NUM_BANKBAGSLOTS + 1
-local idx_accountbank_last = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + NUM_BANKBAGSLOTS + 5
+local idx_accountbank_first = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + Constants.InventoryConstants.NumCharacterBankSlots + 1
+local idx_accountbank_last = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + Constants.InventoryConstants.NumCharacterBankSlots + Constants.InventoryConstants.NumAccountBankSlots
 
 local C_MEA = '\124cff2196f3'
 local C_KW = '\124cnORANGE_FONT_COLOR:'
