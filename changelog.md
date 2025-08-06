@@ -4,6 +4,14 @@ To see all commits, including all alpha changes, [*go here*](https://github.com/
 
 ## Releases
 
+#### 2.3 (2025-08-06)
+
+- Basic compatibility with TWW 11.2 (char bank rework, removal of reagent bank and void storage).
+    - So far only (briefly) tested with Blizz Bags/Bank and with Baganator.
+    - It’s likely that there comes up a glitch or two; you’ll see an update then in the next days.
+    - If you find glitches or incompatibilities with other addons yourself, feel free to open a ticket on the [issue tracker](https://github.com/tflo/Move-em-All/issues) (please do _not_ post issues to the CurseForge comments thread).
+- toc: Set interface to `110200`
+
 #### 2.2.4 (2025-06-18)
 
 - toc: Added `AllowAddOnTableAccess: 1`
