@@ -6,9 +6,11 @@ mea_database = mea_database or {}
 -- Unclear when this started, and if it depends on Baganator, on server lag, on a change introduced with 11.1.5,
 -- if it's a Mac issue, or if it's my mouse, or whatever.
 -- Removing `mea_button_pressed()` from the main conditional (so only testing for the modifier key) doesn't change anything.
+-- Currently (Aug 2025) it's back to normal, so no clue what this was/is…
 
 
--- 11.2: https://warcraft.wiki.gg/wiki/Patch_11.2.0/API_changes
+--[[ https://warcraft.wiki.gg/wiki/Patch_11.2.0/API_changes
+--]]
 
 --[[---------------------------------------------------------------------------
 	§ Definitions, references
@@ -23,14 +25,15 @@ local C_ContainerUseContainerItem = _G.C_Container.UseContainerItem
 local C_TimerAfter = C_Timer.After
 
 -- https://warcraft.wiki.gg/wiki/BagID
+-- https://warcraft.wiki.gg/wiki/Patch_11.2.0/API_changes
 -- https://www.townlong-yak.com/framexml/55824/go/Blizzard_APIDocumentationGenerated/BagIndexConstantsDocumentation.lua#16
+
 -- Bags: Should be contiguous from backpack (0) to reagent bag (5), but for correctness we treat them individually
 local idx_bags_container = BACKPACK_CONTAINER
 local idx_bags_rea = BACKPACK_CONTAINER + NUM_BAG_SLOTS + 1
 local idx_bags_first = BACKPACK_CONTAINER + 1
 local idx_bags_last = BACKPACK_CONTAINER + NUM_BAG_SLOTS
--- Bank OLD: Not contiguous: -3 for reagent bank, -1 for bank container, then 6 to 12
--- Bank 11.2: Not contiguous: Characterbanktab -2, CharacterBankTabs 6 to 11
+-- Bank: contiguous: CharacterBankTabs 6 to 11
 local idx_charbank_first = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + 1
 local idx_charbank_last = BACKPACK_CONTAINER + ITEM_INVENTORY_BANK_BAG_OFFSET + Constants.InventoryConstants.NumCharacterBankSlots
 -- Account Bank: Contiguous from 13 to 17
@@ -73,9 +76,6 @@ local function mea_button_pressed()
 	local btn = GetMouseButtonClicked()
 	return btn == buttons[a.db.button]
 end
-
-
--- https://github.com/Ketho/BlizzardInterfaceResources/blob/mainline/Resources/LuaEnum.lua
 
 local PIMF_BANK = Enum.PlayerInteractionType.Banker -- 8
 local PIMF_MAIL = Enum.PlayerInteractionType.MailInfo -- 17
