@@ -177,9 +177,9 @@ local function from_account_bank(bagid)
 end
 
 -- bankType: 0 = character; 1 = guild; 2 = account
-
+-- Does not work with guild bank, and GuildBankFrame doesn't know GetActiveBankType.
 local function dest_banktype()
-	if BankFrame and (BankFrame:GetActiveBankType() == 2 or BankFrame.activeTabIndex == 3) then
+	if BankFrame and BankFrame:GetActiveBankType() == 2 then
 		return 2
 	end
 	return 0
