@@ -58,14 +58,9 @@ The sweet spot seems to be somewhere around 0.5/0.6s. The longer the delay, the 
 
 ## Compatibility
 
-MEA works flawlessly with Blizzard’s bags, and – _at least before WoW TWW 11.2_ – with LiteBag, Baganator, very likely also with many other bag addons. I briefly tested it with ArkInventory, Baud Bag, Bagnon, and haven’t noticed any issues. 
+MEA works flawlessly with Blizzard’s bags, and – _at least before WoW TWW 11.2_ – with LiteBag, Baganator, very likely also with many other bag addons. I briefly tested it with ArkInventory, Baud Bag, Bagnon, and haven’t noticed any issues. _Under TWW 11.2 only tested with Blizz UI and Baganator._
 
-### Warband Bank (added in MEA 2.2)
-
-- *From Bags to Warband Bank:* Tested with Blizz UI and Baganator; probably/possibly also works with other addons, but not (yet) tested!
-- *From Warband Bank to Bags:* Tested with Blizz UI; does *not* work with Baganator; not (yet) tested with other addons!
-
-Note: Baganator comes with its own mass-transfer functionality. Use this for transfers from Baganator Warband Bank to Bags.
+Note: Baganator comes with its own mass-transfer functionality, which is highly configurable (e.g. by category, by search filters). So if you use Baganator, I recommend using this for _large_ transfers. It also tends to work faster than MEA.
 
 ### Mail
 
