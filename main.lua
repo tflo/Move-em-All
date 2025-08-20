@@ -115,31 +115,45 @@ end
 ---------------------------------------------------------------------------]]--
 
 local ef = CreateFrame 'Frame'
+
+local function ADDON_LOADED(...)
+	if ... == addon_name then
+		ef:UnregisterEvent 'ADDON_LOADED'
+		a.db = mea_database
+		a.db.button = a.db.button or 'right'
+		a.db.modifier = a.db.modifier or (is_mac and 'command' or 'shift')
+		a.db.delay_normal = a.db.delay_normal or nil
+		a.db.disable_mail_safety = a.db.disable_mail_safety or nil
+		-- Will also reset to default if the user had set it to none. This is good, because as of now guild bank
+		-- transfers will not work without any delay.
+		a.db.delay_guildbank = a.db.delay_guildbank or DELAY_GB_DEFAULT
+	end
+end
+
+local function PLAYER_INTERACTION_MANAGER_FRAME_SHOW(...)
+	pimf = ...
+	debugprint('PIMF:', pimf)
+end
+
+local function PLAYER_INTERACTION_MANAGER_FRAME_HIDE()
+	pimf = nil
+	debugprint('PIMF:', pimf)
+end
+
+local event_handlers = {
+	['ADDON_LOADED'] = ADDON_LOADED,
+	['PLAYER_INTERACTION_MANAGER_FRAME_SHOW'] = PLAYER_INTERACTION_MANAGER_FRAME_SHOW,
+	['PLAYER_INTERACTION_MANAGER_FRAME_HIDE'] = PLAYER_INTERACTION_MANAGER_FRAME_HIDE,
+}
+
 ef:RegisterEvent 'ADDON_LOADED'
 ef:RegisterEvent 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW'
 ef:RegisterEvent 'PLAYER_INTERACTION_MANAGER_FRAME_HIDE'
 
-ef:SetScript('OnEvent', function(self, event, ...)
-	if event == 'ADDON_LOADED' then
-		if ... == addon_name then
-			ef:UnregisterEvent 'ADDON_LOADED'
-			a.db = mea_database
-			a.db.button = a.db.button or 'right'
-			a.db.modifier = a.db.modifier or (is_mac and 'command' or 'shift')
-			a.db.delay_normal = a.db.delay_normal or nil
-			a.db.disable_mail_safety = a.db.disable_mail_safety or nil
-			-- Will also reset to default if the user had set it to none. This is good, because as of now guild bank
-			-- transfers will not work without any delay.
-			a.db.delay_guildbank = a.db.delay_guildbank or DELAY_GB_DEFAULT
-		end
-	elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
-		pimf = ...
-	else
-		pimf = nil
-	end
-	debugprint('PIMF:', pimf)
+ef:SetScript('OnEvent', function(_, event, ...)
+	local handler = event_handlers[event]
+	if handler then handler(...) end
 end)
-
 
 --[[---------------------------------------------------------------------------
 	§ Main
