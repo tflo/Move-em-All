@@ -69,17 +69,23 @@ Note: Baganator comes with its own mass-transfer functionality. Use this for tra
 
 ### Mail
 
-Works with the Blizz Mail UI and addons that are using the Blizz Mail UI (e.g. _EasyMail,_ probably _Postal_ too). It _can_ work with _TSM Mail_ (see the notes below).
+MEA works with the Blizz Mail UI and addons that are using the Blizz Mail UI (e.g. EasyMail, probably Postal too). It _can_ work with TSM Mail (see “Mail safety”).
 
-For safety reasons, as of version 2.1.4 (2024-03-13), MEA no longer works – out of the box – with TSM Mail or any mail addon that hides the Blizzard Send Mail button. See the 2.1.4 (2024-03-13) change notes to understand why.
+#### Mail safety
 
-You can disable (and re-enable) the safety with `/mea togglemailsafety`, which will also restore functionality with TSM. 
+For safety reasons, out of the box MEA does not work with TSM Mail or any mail addon that hides the Blizzard Send Mail button. Point of this is to prevent that you accidentally consume or equip an item when you right-click it while the “Inbox” tab is active.
+
+You can disable (and re-enable) the safety with `/mea togglemailsafety`, which will also grant functionality with TSM. 
 
 If you do this, please make sure that the Send Mail UI (not the Inbox!) of Blizz Mail (or whatever Mail addon) is actually active before clicking on an item with MEA. If the Inbox is active (and the safety disabled), the item(s) will be _used_ (consumed or equipped) instead of being sent! (With some item types you may get an “Action Blocked” popup, which is a good thing in this particular case.)
 
-*I recommend to leave the safety enabled,* and for mass-moving just switch to the Blizz Mail UI.
+*I recommend to leave the safety enabled,* even if you use TSM, and for mass-moving with MEA just switch to the Blizz Mail UI.
 
-Please note that the described behavior is not a bug in MEA, this is the standard Blizz behavior when you right-click an item against the Mail inbox. The thing is, with MEA, the consequences of such a misclick can be more dire, since it potentially affects multiple items. Hence the protection. (Actually, with the protection, MEA is safer than Blizz’s default behavior, since a MEA click does absolutely nothing when the inbox frame is active.)
+Please note that the described behavior is not a bug in MEA, this is the standard Blizz behavior when you right-click an item against the Mail _Inbox._ The thing is, with MEA, the consequences of such a misclick can be more dire, since it potentially affects multiple items. Hence the protection. 
+
+Actually, with the protection, MEA is safer than Blizz’s default behavior, since a MEA click does absolutely nothing when the Inbox tab is active.
+
+Tip: If you make it a habit to always use your MEA modifier key when transferring items to the mail (even if it’s a single item), then it will never happen that you accidentally eat the expensive Augment Rune that you just wanted to send to your AH toon!
   
 
 ## Notes
