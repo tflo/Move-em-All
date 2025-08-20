@@ -92,15 +92,18 @@ local valid_targets = {
 }
 
 local function safe_to_run()
--- 	debugprint('PIMF:', pimf)
-	if valid_targets[pimf] then return true end
+	-- debugprint('PIMF:', pimf)
 	if pimf == PIMF_MAIL then
-		if a.db.disable_mail_safety or SendMailMailButton:IsVisible() then
-			return true
+		if a.db.disable_mail_safety or SendMailMailButton:IsVisible() then return true end
+		if not aborting_msg_sent then
+			print(MSG_PREFIX, 'Mail frame is open, but no Send button was found. Aborting transfer!')
+			aborting_msg_sent = true
 		end
+	elseif valid_targets[pimf] then
+		return true
 	end
 	if not aborting_msg_sent then
-		print(MSG_PREFIX, 'No valid destination to move items to, aborting transfer!')
+		print(MSG_PREFIX, 'No valid destination to move items to. Aborting transfer!')
 		aborting_msg_sent = true
 	end
 	return false
