@@ -4,6 +4,12 @@ To see all commits, including all alpha changes, [*go here*](https://github.com/
 
 ## Releases
 
+#### 2.3.1 (2025-08-20)
+
+- With Mail Safety enabled: Instead of the generic “no valid destination” message you now get a dedicated message when the mail frame is open but the “Send mail” tab is not active.
+    - Reminder: If you make it a habit to always use your MEA modifier key when transferring items to the mail (even if it’s a single item), then it will never happen that you accidentally eat the expensive Augment Rune that you just wanted to send to your AH toon!
+- Refactored event handling.
+
 #### 2.3 (2025-08-06)
 
 - Basic compatibility with TWW 11.2 (char bank rework, removal of reagent bank and void storage).
