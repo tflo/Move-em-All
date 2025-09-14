@@ -20,6 +20,8 @@ The price for this is a few (minor) caveats, which you can find in the "Caveats"
 
 …and from Char/Warband Bank to Bags.
 
+___If you’re having trouble reading this description on CurseForge, you might want to try switching to the [REPO PAGE](https://github.com/tflo/Move-em-All?tab=readme-ov-file#move-em-all). You’ll find the exact same text there, but it’s much easier to read and free from CurseForge’s rendering errors.___
+
 ## Usage
 
 To mass move, click an item with the set mouse button while holding the set modifier key down. The __defaults__ are __Right mouse button__ and __Command key__ for __macOS,__ and __Right mouse button__ and __Shift key__ for __Windows.__
@@ -93,23 +95,19 @@ I hope you enjoy it!
 
 ---
 
-Feel free to post suggestions or issues in the [GitHub Issues](https://github.com/tflo/Move-em-All/issues) of the repo!
-__Please do not post issues or suggestions in the comments on Curseforge.__
+Feel free to share your suggestions or report issues on the [GitHub Issues](https://github.com/tflo/Move-em-All/issues) page of the repository.  
+__Please avoid posting suggestions or issues in the comments on Curseforge.__
 
 ---
 
 __Other addons by me:__
 
-- [___PetWalker___](https://www.curseforge.com/wow/addons/petwalker): Never lose your pet again (…or randomly summon a
-  new one).
-- [___Auto Quest Tracker Mk III___](https://www.curseforge.com/wow/addons/auto-quest-tracker-mk-iii): Continuation of
-  the one and only original. Up to date and new features.
-- [___Auto-Confirm Equip___](https://www.curseforge.com/wow/addons/auto-confirm-equip): Less (or no) confirmation
-  prompts for BoE gear.
-- [___Action Bar Button Growth Direction___](https://www.curseforge.com/wow/addons/action-bar-button-growth-direction):
-  Fix the button growth direction of multi-row action bars to what is was before Dragonflight (top --> bottom).
-- [___EditBox Font Improver___](https://www.curseforge.com/wow/addons/editbox-font-improver): Better fonts for
-  your macro/script edit boxes.
+- [___PetWalker___](https://www.curseforge.com/wow/addons/petwalker): Never lose your pet again (…or randomly summon a new one).
+- [___Auto Quest Tracker Mk III___](https://www.curseforge.com/wow/addons/auto-quest-tracker-mk-iii): Continuation of the one and only original. Up to date and tons of new features.
+- [___Auto Discount Repair___](https://www.curseforge.com/wow/addons/auto-discount-repair): Automatically repair your gear – where it’s cheap.
+- [___Auto-Confirm Equip___](https://www.curseforge.com/wow/addons/auto-confirm-equip): Less (or no) confirmation prompts for BoE gear.
+- [___Action Bar Button Growth Direction___](https://www.curseforge.com/wow/addons/action-bar-button-growth-direction): Fix the button growth direction of multi-row action bars to what is was before Dragonflight (top --> bottom).
+- [___EditBox Font Improver___](https://www.curseforge.com/wow/addons/editbox-font-improver): Better fonts for your macro/script edit boxes.
 
 __WeakAuras:__
 

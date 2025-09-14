@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (c) 2023-2025 Thomas Floeren
+
 local addon_name, a = ...
 mea_database = mea_database or {}
 
@@ -317,27 +320,3 @@ SlashCmdList['MOVEEMALL'] = function(msg)
 		print(MSG_PREFIX, 'That was not a valid input. Type', C_KW .. '/mea h\124r for help.')
 	end
 end
-
-
-
-
---[[ License ===================================================================
-
-	Copyright © 2023-2025 Thomas Floeren
-
-	This file is part of Move'em All.
-
-	Move'em All is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by the
-	Free Software Foundation, either version 3 of the License, or (at your
-	option) any later version.
-
-	Move'em All is distributed in the hope that it will be useful, but
-	WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-	or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-	more details.
-
-	You should have received a copy of the GNU General Public License along with
-	Move'em All. If not, see <https://www.gnu.org/licenses/>.
-
-==============================================================================]]

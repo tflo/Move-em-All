@@ -4,6 +4,11 @@ To see all commits, including all alpha changes, [*go here*](https://github.com/
 
 ## Releases
 
+#### 2.3.2 (2025-09-14)
+
+- Standardized licensing information in the files.
+- ReadMe/description: minor changes; added my new addon [Auto Discount Repair](https://www.curseforge.com/wow/addons/auto-discount-repair) to the “Other addons” list.
+
 #### 2.3.1 (2025-08-20)
 
 - With Mail Safety enabled: Instead of the generic “no valid destination” message you now get a dedicated message when the mail frame is open but the “Send mail” tab is not active.
