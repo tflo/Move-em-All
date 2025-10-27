@@ -20,7 +20,11 @@ The price for this is a few (minor) caveats, which you can find in the "Caveats"
 
 …and from Char/Warband Bank to Bags.
 
-___If you’re having trouble reading this description on CurseForge, you might want to try switching to the [REPO PAGE](https://github.com/tflo/Move-em-All?tab=readme-ov-file#move-em-all). You’ll find the exact same text there, but it’s much easier to read and free from CurseForge’s rendering errors.___
+---
+
+*If you’re having trouble reading this description on CurseForge, you might want to try switching to the [Repo Page](https://github.com/tflo/Move-em-All?tab=readme-ov-file#move-em-all). You’ll find the exact same text there, but it’s much easier to read and free from CurseForge’s rendering errors.*
+
+---
 
 ## Usage
 
