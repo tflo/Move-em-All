@@ -1,15 +1,16 @@
 # Move ’em All
 
-This addon, let’s call it MEA, allows you to mass move all items of the same item ID with a single mouse click, e.g. between bank and bags.
+Move all items of the same item ID with a single mouse click between bank and bags and other locations.
 
-The good things about MEA are:
+MEA is…
 
-- It is pretty fast.
-- It is compatible with many, probably most, bag addons. For Warband Bank see “Warband Bank” in the “Compatibility” section below.
+- Pretty fast
+- Super lightweight
+- *Compatible with many,* probably most, *bag addons* (see “Compatibility” section below)
 
 The price for this is a few (minor) caveats, which you can find in the "Caveats" section below.
 
-**Currently the mass moving works from Bags to…**
+**Mass moving works from Bags to…**
 
 - Character Bank
 - Warband Bank (account bank)
@@ -43,13 +44,13 @@ If you type just `/mea`, it will show you the currently set mouse button and mod
 
 ### Dumb
 
-The addon is lightweight, super fast - and dumb. (And I actually plan to keep it more or less that way).
+The addon is super lightweight, fast, almost universally compatible - and dumb! And I actually plan to keep it that way. Making it less dumb would almost certainly mean sacrificing compatibility with many bag addons.
 
 ‘Dumb’ means:
 
 - MEA simply applies the default right-click action to all items with the same ID. Of course, it only does this if it detects a valid destination to move the items to (e.g. open bank, merchant, mailbox, …).
 - It does not check if the clicked items actually have all arrived (e.g. when the bank is full). So, when it prints “Probably moved 12x [Shrouded Cloth]” to the chat, it means what is says: it’s an optimistic estimation. 
-- It doesn’t know or care if a bag slot holds a single item or a stack of 1000, it always reports back the number of slots it has “moved”, which can be stacks or single items.
+- It doesn’t know or care if a bag slot holds a single item or a stack of 1000, it always reports back the number of slots it has moved, which can be stacks or single items.
 
 
 ### Guild bank
@@ -64,9 +65,11 @@ The sweet spot seems to be somewhere around 0.5/0.6s. The longer the delay, the 
 
 ## Compatibility
 
-MEA works flawlessly with Blizzard’s bags, and – _at least before WoW TWW 11.2_ – with LiteBag, Baganator, very likely also with many other bag addons. I briefly tested it with ArkInventory, Baud Bag, Bagnon, and haven’t noticed any issues. _Under TWW 11.2 only tested with Blizz UI and Baganator._
+MEA works flawlessly with Blizzard’s bags, LiteBag, Baganator, very likely also with many other bag addons. I briefly tested it (note: before TWW 11.2) with ArkInventory, Baud Bag, Bagnon, and haven’t noticed any issues. 
 
-Note: Baganator comes with its own mass-transfer functionality, which is highly configurable (e.g. by category, by search filters). So if you use Baganator, I recommend using this for _large_ transfers. It also tends to work faster than MEA.
+_Under TWW 11.2 only tested with Blizz UI and Baganator._ Currently, there’s not much point testing with other bag addons because Baganator has made them all obsolete.
+
+Note: Baganator comes with its own mass-transfer functionality, which is highly configurable (e.g. by category, by search filters). So if you use Baganator, I recommend using this for _large_ transfers. However, also when using Baganator, MEA is still very handy for instant transfers without typing in a filter string first.
 
 ### Mail
 
@@ -109,9 +112,10 @@ __Other addons by me:__
 - [___PetWalker___](https://www.curseforge.com/wow/addons/petwalker): Never lose your pet again (…or randomly summon a new one).
 - [___Auto Quest Tracker Mk III___](https://www.curseforge.com/wow/addons/auto-quest-tracker-mk-iii): Continuation of the one and only original. Up to date and tons of new features.
 - [___Auto Discount Repair___](https://www.curseforge.com/wow/addons/auto-discount-repair): Automatically repair your gear – where it’s cheap.
-- [___Auto-Confirm Equip___](https://www.curseforge.com/wow/addons/auto-confirm-equip): Less (or no) confirmation prompts for BoE gear.
+- [___Auto-Confirm Equip___](https://www.curseforge.com/wow/addons/auto-confirm-equip): Less (or no) confirmation prompts for BoE and BtW gear.
+- [___Slip Frames___](https://www.curseforge.com/wow/addons/slip-frames): Unit frame transparency and click-through on demand – for Player, Pet, Target, and Focus frame.
 - [___Action Bar Button Growth Direction___](https://www.curseforge.com/wow/addons/action-bar-button-growth-direction): Fix the button growth direction of multi-row action bars to what is was before Dragonflight (top --> bottom).
-- [___EditBox Font Improver___](https://www.curseforge.com/wow/addons/editbox-font-improver): Better fonts for your macro/script edit boxes.
+- [___EditBox Font Improver___](https://www.curseforge.com/wow/addons/editbox-font-improver): Better fonts and font size for the macro/script edit boxes of many addons, incl. Blizz's. Comes with 70+ preinstalled monospaced fonts.
 
 __WeakAuras:__
 
