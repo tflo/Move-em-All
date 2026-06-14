@@ -4,6 +4,10 @@ To see all commits, including all alpha changes, [*go here*](https://github.com/
 
 ## Releases
 
+#### 2.3.7 (2026-06-14)
+
+- toc bump, no changes.
+
 #### 2.3.6 (2026-02-28)
 
 - Remove old interface compat flags from the toc.
