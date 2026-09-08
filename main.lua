@@ -207,7 +207,7 @@ local function dest_banktype()
 		-- Blizz bank
 		or BankFrame and BankFrame:GetActiveBankType()
 	-- Don't return nil in case of incompatible bag addons
-	return type == 2 and 2 or 0
+	return type == Enum.BankType.Account and Enum.BankType.Account or Enum.BankType.Character
 end
 
 -- https://warcraft.wiki.gg/wiki/ItemLocationMixin
@@ -231,7 +231,7 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 				debugprint('At work now. Active delay:', delay)
 				if from_bags(bag_id) then
 					-- No idea if bankType 1 for guildbank has any effect
-					local banktype = pimf == PIMF_BANK and dest_banktype() or pimf == PIMF_GUILDBANK and 1 or nil
+					local banktype = pimf == PIMF_BANK and dest_banktype() or pimf == PIMF_GUILDBANK and Enum.BankType.Guild or nil
 					use_items(idx_bags_container, clicked_item, banktype)
 					use_items(idx_bags_rea, clicked_item, banktype)
 					for bag = idx_bags_first, idx_bags_last do
