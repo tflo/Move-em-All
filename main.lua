@@ -232,6 +232,16 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 				if from_bags(bag_id) then
 					-- No idea if bankType 1 for guildbank has any effect
 					local banktype = pimf == PIMF_BANK and dest_banktype() or pimf == PIMF_GUILDBANK and Enum.BankType.Guild or nil
+					--[=[
+					-- Does this make sense?
+					-- Blizz already throws an error msg, so no risk to accidentally consume the item
+					if banktype then
+						if not C_Bank.IsItemAllowedInBankType(banktype, itemLocation) then
+							print(MSG_PREFIX, 'Item is not allowed in this bank type!')
+							return
+						end
+					end
+					--]=]
 					use_items(idx_bags_container, clicked_item, banktype)
 					use_items(idx_bags_rea, clicked_item, banktype)
 					for bag = idx_bags_first, idx_bags_last do
