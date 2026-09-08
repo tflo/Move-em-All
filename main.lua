@@ -199,12 +199,16 @@ end
 -- bankType: 0 = character; 1 = guild; 2 = account
 -- Does not work with guild bank, and GuildBankFrame doesn't know GetActiveBankType.
 local function dest_banktype()
-	if BankFrame and BankFrame:GetActiveBankType() == 2 then
-		return 2
-	end
-	return 0
+	local type =
+		-- Baganator/Compatibility/BankType.lua, added in v821, Aug 2026
+		-- Also used by BagBrother, EUIStandaloneBags, EllesmereUlBags
+		-- https://www.townlong-yak.com/globe/wut/#q:Addon_GetBankType
+		Addon_GetBankType and Addon_GetBankType()
+		-- Blizz bank
+		or BankFrame and BankFrame:GetActiveBankType()
+	-- Don't return nil in case of incompatible bag addons
+	return type == 2 and 2 or 0
 end
-
 
 -- https://warcraft.wiki.gg/wiki/ItemLocationMixin
 -- https://github.com/search?q=repo%3Atomrus88%2FBlizzardInterfaceCode%20HandleModifiedItemClick&type=code
