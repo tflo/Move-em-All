@@ -4,6 +4,13 @@ To see all commits, including all alpha changes, [*go here*](https://github.com/
 
 ## Releases
 
+#### 2.3.8 (2026-09-08)
+
+- Restore bank type detection (character/account bank) for Baganator.
+    - They switched to a new `Addon_GetBankType` compatibility function, which should also work for BagBrother, EUIStandaloneBags, EllesmereUlBags, and possibly more addons.
+- toc: add compatibility flag 120105.
+- Update compatibility section of the readme.
+
 #### 2.3.7 (2026-06-14)
 
 - toc bump, no changes.

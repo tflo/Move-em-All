@@ -65,9 +65,9 @@ The sweet spot seems to be somewhere around 0.5/0.6s. The longer the delay, the 
 
 ## Compatibility
 
-MEA works flawlessly with Blizzard’s bags, LiteBag, Baganator, very likely also with many other bag addons. I briefly tested it (note: before TWW 11.2) with ArkInventory, Baud Bag, Bagnon, and haven’t noticed any issues. 
+MEA is fully compatible with Blizzard’s bags/bank and Baganator. 
 
-_Under TWW 11.2 only tested with Blizz UI and Baganator._ Currently, there’s not much point testing with other bag addons because Baganator has made them all obsolete.
+Besides that, account bank detection should also work with BagBrother, EUIStandaloneBags, EllesmereUlBags, and possibly more addons. Basic transfers between bag and char bank should work with any bag addon.
 
 Note: Baganator comes with its own mass-transfer functionality, which is highly configurable (e.g. by category, by search filters). So if you use Baganator, I recommend using this for _large_ transfers. However, also when using Baganator, MEA is still very handy for instant transfers without typing in a filter string first.
 

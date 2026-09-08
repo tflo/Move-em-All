@@ -1,6 +1,6 @@
-## Interface: 120005, 120007, 120100
+## Interface: 120100, 120105
 ## Title: Move 'em All
-## Version: 2.3.7
+## Version: 2.3.8
 ## IconTexture: Interface/Buttons/JumpUpArrow
 ## Notes: One-click mass move all items with the same ID to the bank, mail, or other locations.
 ## Category: Inventory
