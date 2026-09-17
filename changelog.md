@@ -4,6 +4,10 @@ To see all commits, including all alpha changes, [*go here*](https://github.com/
 
 ## Releases
 
+#### 2.3.9 (2026-09-17)
+
+- Cleanup.
+
 #### 2.3.8 (2026-09-08)
 
 - Restore bank type detection (character/account bank) for Baganator.

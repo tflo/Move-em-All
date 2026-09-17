@@ -2,6 +2,7 @@
 -- Copyright (c) 2023-2026 Thomas Floeren
 
 local addon_name, a = ...
+---@diagnostic disable-next-line: lowercase-global
 mea_database = mea_database or {}
 
 -- TODO:
@@ -16,7 +17,7 @@ mea_database = mea_database or {}
 --]]
 
 --[[---------------------------------------------------------------------------
-	§ Definitions, references
+	Definitions, references
 ---------------------------------------------------------------------------]]--
 
 local debug = false
@@ -114,7 +115,7 @@ end
 
 
 --[[---------------------------------------------------------------------------
-	§ Events
+	Events
 ---------------------------------------------------------------------------]]--
 
 local ef = CreateFrame 'Frame'
@@ -159,7 +160,7 @@ ef:SetScript('OnEvent', function(_, event, ...)
 end)
 
 --[[---------------------------------------------------------------------------
-	§ Main
+	Main
 ---------------------------------------------------------------------------]]--
 
 local function use_items(bag, item, to_banktype)
@@ -220,7 +221,6 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 		aborting_msg_sent = nil
 		-- XXX: Baganator account bank does not give itemLocation
 		if itemLocation and itemLocation:IsBagAndSlot() and safe_to_run() then
--- 			debugprint(DevTools_Dump(itemLocation))
 			local bag_id = itemLocation.bagID
 			local slot_id = itemLocation.slotIndex
 			debugprint('`itemLocation` and `safe_to_run` passed; Bag ID:', bag_id, '; Slot ID:', slot_id, '; Link:', link)
@@ -230,7 +230,7 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 				delay = pimf == PIMF_GUILDBANK and max(a.db.delay_guildbank or 0, a.db.delay_normal or 0) or a.db.delay_normal
 				debugprint('At work now. Active delay:', delay)
 				if from_bags(bag_id) then
-					-- No idea if bankType 1 for guildbank has any effect
+					-- No idea if bankType (1) for guildbank has any effect
 					local banktype = pimf == PIMF_BANK and dest_banktype() or pimf == PIMF_GUILDBANK and Enum.BankType.Guild or nil
 					--[=[
 					-- Does this make sense?
@@ -264,7 +264,7 @@ end)
 
 
 --[[---------------------------------------------------------------------------
-	§ UI
+	UI
 ---------------------------------------------------------------------------]]--
 
 --[[ Commands:
