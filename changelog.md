@@ -4,6 +4,10 @@ To see all commits, including all alpha changes, [*go here*](https://github.com/
 
 ## Releases
 
+#### 2.4 (2026-09-27)
+
+- Add the account bank from [Warband Bank Distance Inhibitor](https://www.wowhead.com/spell=460905/warband-bank-distance-inhibitor) as valid transfer target.
+
 #### 2.3.9 (2026-09-17)
 
 - Cleanup.

@@ -86,6 +86,8 @@ local PIMF_MAIL = Enum.PlayerInteractionType.MailInfo -- 17
 local PIMF_GUILDBANK = Enum.PlayerInteractionType.GuildBanker -- 10
 local PIMF_MERCHANT = Enum.PlayerInteractionType.Merchant -- 5
 local PIMF_TRADE = Enum.PlayerInteractionType.TradePartner -- 1
+-- The NPC spawned by the Warband Bank Distance Inhibitor spell
+local PIMF_ACCOUNTBANK = Enum.PlayerInteractionType.AccountBanker -- 68
 
 local valid_targets = {
 	[PIMF_BANK] = true, -- Bank
@@ -93,6 +95,7 @@ local valid_targets = {
 	[PIMF_GUILDBANK] = true, -- Guild bank
 	[PIMF_MERCHANT] = true, -- Merchant
 	[PIMF_TRADE] = true, -- Trade
+	[PIMF_ACCOUNTBANK] = true, -- Warband Bank Distance Inhibitor
 }
 
 local function safe_to_run()
@@ -231,7 +234,7 @@ hooksecurefunc('HandleModifiedItemClick', function(link, itemLocation)
 				debugprint('At work now. Active delay:', delay)
 				if from_bags(bag_id) then
 					-- No idea if bankType (1) for guildbank has any effect
-					local banktype = pimf == PIMF_BANK and dest_banktype() or pimf == PIMF_GUILDBANK and Enum.BankType.Guild or nil
+					local banktype = pimf == PIMF_BANK and dest_banktype() or pimf == PIMF_ACCOUNTBANK and Enum.BankType.Account or pimf == PIMF_GUILDBANK and Enum.BankType.Guild or nil
 					--[=[
 					-- Does this make sense?
 					-- Blizz already throws an error msg, so no risk to accidentally consume the item
